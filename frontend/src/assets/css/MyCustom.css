@@ -1,0 +1,10 @@
+input.input-error,
+select.input-error {
+    border-color: red;
+}
+
+.error-msg-text {
+    color: red;
+    margin-top: -15px;
+    margin-bottom: 10px;
+}

@@ -8,3 +8,12 @@ select.input-error {
     margin-top: -15px;
     margin-bottom: 10px;
 }
+
+.text-field-forms {
+    border: 1px solid #e0e5f2;
+    border-radius: 20px;
+    padding: 8px;
+    font-weight: 200;
+    font-size: sm;
+    outline: none;
+}

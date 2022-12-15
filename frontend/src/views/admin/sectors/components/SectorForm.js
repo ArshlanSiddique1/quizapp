@@ -1,6 +1,5 @@
 // Chakra imports
 import {
-  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -11,16 +10,12 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
-  Box
+  Box,
 } from "@chakra-ui/react";
-import Card from "components/card/Card.js";
-// Custom components
-import Menu from "components/menu/MainMenu";
 
 export default function SectorForm(props) {
   const { ...rest } = props;
   // Chakra Color Mode
-  const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
   return (
@@ -43,13 +38,13 @@ export default function SectorForm(props) {
               variant="auth"
               fontSize="sm"
               ms={{ base: "0px", md: "0px" }}
-              type="email"
+              type="text"
               placeholder="title"
               mb="24px"
               fontWeight="500"
               size="lg"
-              name="email"
-              value=""
+              name="title"
+
             />
           </Box>
           <Box bg="" height="80px">
@@ -68,13 +63,13 @@ export default function SectorForm(props) {
               variant="auth"
               fontSize="sm"
               ms={{ base: "0px", md: "0px" }}
-              type="email"
+              type="text"
               placeholder="Write"
               mb="24px"
               fontWeight="500"
               size="lg"
-              name="email"
-              value=""
+              name="shortDescription"
+
             />
           </Box>
         </SimpleGrid>
@@ -93,13 +88,12 @@ export default function SectorForm(props) {
           variant="auth"
           fontSize="sm"
           ms={{ base: "0px", md: "0px" }}
-          type="email"
+          type="text"
           placeholder="Write"
           mb="24px"
           fontWeight="500"
           size="lg"
-          name="email"
-          value=""
+          name="metaTitle"
         />
         <FormLabel
           display="flex"
@@ -111,18 +105,11 @@ export default function SectorForm(props) {
         >
           Meta Description<Text color={brandStars}>*</Text>
         </FormLabel>
-        <Input
-          isRequired={true}
-          variant="auth"
-          fontSize="sm"
-          ms={{ base: "0px", md: "0px" }}
-          type="email"
-          placeholder="Write"
-          mb="24px"
-          fontWeight="500"
-          size="lg"
-          name="email"
-          value=""
+        <textarea className="text-field-forms"
+          type="text"
+          rows="4" cols="137"
+          name="metaDescription"
+          placeholder="Tell Something about youself in 150 Character!"
         />
         <RadioGroup defaultValue="ACTIVE">
           <HStack spacing="24px">

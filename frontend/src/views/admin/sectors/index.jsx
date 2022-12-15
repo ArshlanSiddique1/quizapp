@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 
 // Custom components
 
-import Notifications from "views/admin/sectors/components/Notifications";
+import CardComponent from "views/admin/sectors/components/Card";
 
 // Assets
 import React from "react";
@@ -13,7 +13,7 @@ export default function Overview() {
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       {/* Main Fields */}
 
-      <Notifications
+      <CardComponent
         used={25.6}
         total={50}
         gridArea={{

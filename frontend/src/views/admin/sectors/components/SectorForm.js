@@ -12,6 +12,7 @@ import {
   SimpleGrid,
   Box,
 } from "@chakra-ui/react";
+import Upload from "./upload-img-form";
 
 export default function SectorForm(props) {
   const { ...rest } = props;
@@ -22,6 +23,7 @@ export default function SectorForm(props) {
     <>
       <FormControl>
         <SimpleGrid columns={2} spacing={10}>
+
           <Box bg="" height="80px">
             <FormLabel
               display="flex"
@@ -47,6 +49,31 @@ export default function SectorForm(props) {
 
             />
           </Box>
+
+          <Box bg="" height="80px">
+            <FormLabel
+              display="flex"
+              ms="4px"
+              fontSize="sm"
+              fontWeight="500"
+              color={textColor}
+              mb="8px"
+            // style={{zIndex:"20",position:"absolute"}}
+            >
+              Image<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <Upload className="upload-img-form"
+              gridArea={{ 
+                base: "3/1  / 4 / 2",
+                lg: " 1 /3 / 2 / 4",
+              }}
+              minH={{ base: "auto", lg: "250px", "2xl": "365px" }}
+              pe='2px'
+              pb={{ base: "10px", lg: "20px" }}
+            />
+          </Box>
+
+
           <Box bg="" height="80px">
             <FormLabel
               display="flex"
@@ -72,6 +99,9 @@ export default function SectorForm(props) {
 
             />
           </Box>
+
+
+
         </SimpleGrid>
         <FormLabel
           display="flex"

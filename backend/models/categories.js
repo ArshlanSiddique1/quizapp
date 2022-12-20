@@ -48,6 +48,7 @@ const categorySchema = new mongoose.Schema({
     featured: {
         type: Boolean,
         enum: ['True', 'False'],
+        default: 'TRUE'
     },
     subscription: {
         type: String,

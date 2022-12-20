@@ -4,15 +4,15 @@ const router = Router();
 
 const sectorsController = require('../../../controllers/sectors/sectors.controller');
 // Route Level Middleware - To Protect Route
-const checkAuth = require("../../../middleware/auth-middleware");
+const userAuth = require("../../../middleware/auth-middleware");
 
 
 // Public Routes
-router.post('/register', checkAuth, sectorsController.register);
-router.get('/view', sectorsController.view);
-router.get('/view/:sector_id', sectorsController.viewOne);
-router.put('/update/:sector_id', checkAuth, sectorsController.update);
-router.patch('/update/:sector_id',checkAuth, sectorsController.update);
-router.delete('/delete/:sector_id', checkAuth, sectorsController.destroy);
+router.post('/', userAuth, sectorsController.create);
+router.get('/', sectorsController.view);
+router.get('/:sector_id', sectorsController.viewOne);
+router.put('/:sector_id', userAuth, sectorsController.update);
+router.patch('/:sector_id', userAuth, sectorsController.update);
+router.delete('/:sector_id', userAuth, sectorsController.destroy);
 
 module.exports = router;

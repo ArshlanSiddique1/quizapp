@@ -1,29 +1,30 @@
-const Sectors = require("../../models/sectors");
+const { sendSuccess, sendCustomError } = require("../../helper/response");
+const { Sectors } = require("../../models/sectors");
 
 
-// Create Sectors
-const register = async function (req, res) {
-    const { title, slug, image, description, shortDescription, metaTitle, metaDescription, featured, status } = req.body;
-    const sectorDetails = { title, slug, image, description, shortDescription, metaTitle, metaDescription, featured, status };
-    const newSectors = new Sectors(sectorDetails);
+const create = async (req, res) => {
+    let { title, slug, shortDescription, metaTitle, metaDescription, status } = req.body;
+    // console.log(name)
+    let requestData = { title, slug, shortDescription, metaTitle, metaDescription, status };
+    let newSectors = new Sectors(requestData);
 
     newSectors.save(async (err, data) => {
         if (err) {
+            console.log('err', err)
+
             if (err.code == 11000) {
-                return (
-                    res.send({ "status": "Failed", "message": "Data Already Exists !" })
-                )
+                return sendCustomError({}, res, err.code, 'Data Already Exists !')
             } else {
-                return (
-                    res.send({ "status": "Failed", "message": "Error in adding data!" })
-                )
+                return sendCustomError({}, res, 500, 'Error in adding Data.')
             }
+
         } else {
-            return (
-                res.status(200).send({ "status": "success", "message": "Sectors added", "data": data })
-            )
+            return sendSuccess(data, res, 200, "Sectors added successfully.");
         }
+
     })
+
+
 }
 
 
@@ -41,14 +42,6 @@ const view = async (req, res) => {
     } else {
         order_by['createdAt'] = -1;
     }
-
-    // For Sorting - Method 2nd
-    // const order_by = {};
-    // if (req.query.sortBy) {
-    //     const order = req.query.sortBy.split(':')
-    //     order_by[order[0]] = order[1] === 'desc' ? -1 : 1
-    // }
-
 
     // For pagination
     const per_page = parseInt((req.query.per_page) ? req.query.per_page : 5);
@@ -124,4 +117,4 @@ const destroy = async (req, res) => {
     }
 }
 
-module.exports = { register, view, viewOne, update, destroy }
+module.exports = { create, view, viewOne, update, destroy }

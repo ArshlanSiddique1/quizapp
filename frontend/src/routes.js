@@ -16,10 +16,12 @@ import MainDashboard from "views/admin/default";
 import NFTMarketplace from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import Sectors from "views/admin/sectors";
+import Categories from "views/admin/Categories";
 import DataTables from "views/admin/dataTables";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+
 
 const routes = [
   {
@@ -42,9 +44,9 @@ const routes = [
   {
     name: "Categories",
     layout: "/admin",
+    path: "/Categories",
     icon: <Icon as={MdCategory} width='20px' height='20px' color='inherit' />,
-    path: "/data-tables",
-    component: DataTables,
+    component: Categories,
   },
   {
     name: "Grades",
@@ -69,7 +71,7 @@ const routes = [
     component: Profile,
   },
   {
-    name: "Questions",
+    name: "Sector ",
     layout: "/admin",
     path: "/data-tables",
     icon: <Icon as={MdQuestionAnswer} width='20px' height='20px' color='inherit' />,

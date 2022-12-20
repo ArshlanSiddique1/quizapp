@@ -2,6 +2,7 @@ import { API_URL } from '../config';
 import axios from 'axios';
 
 export async function setUserData(data) {
+    console.log("data", data)
     localStorage.setItem("UsersData", JSON.stringify(data));
 }
 
@@ -9,20 +10,6 @@ export async function getToken() {
     let userData = JSON.parse(localStorage.getItem("UsersData"));
     return userData?.accessToken;
 }
-
-// export async function getUserData() {
-//     return JSON.parse(localStorage.getItem("AmericanGameUsers"));
-// }
-
-
-
-// export async function getUserId() {
-//     let userData = JSON.parse(localStorage.getItem("AmericanGameUsers"));
-//     if (userData)
-//         return userData?._id;
-//     else
-//         return null
-// }
 
 
 
@@ -39,9 +26,12 @@ export async function loginUser(datas) {
             'Content-Type': 'application/json',
         },
         data: data
+
     };
+    console.log("data", data)
     const request = axios(config);
-    const dataPromise = request.then((response) => response);
+    const dataPromise = request.then((response) => response)
+    // console.log("data.dataPromise", data.dataPromise);
     return dataPromise;
 }
 

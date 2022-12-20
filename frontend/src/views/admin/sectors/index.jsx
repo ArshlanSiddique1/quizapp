@@ -3,8 +3,8 @@ import { Box } from "@chakra-ui/react";
 
 // Custom components
 
-import CardComponent from "views/admin/sectors/components/Card";
-
+// import CardComponent from "/views/admin/sectors/components/Card";
+import CardComponent from "./components/Card"
 // Assets
 import React from "react";
 

@@ -8,7 +8,10 @@ import {
 import Card from "components/card/Card.js";
 // Custom components
 import Menu from "components/menu/MainMenu";
-import SectorForm from "./SectorForm";
+import { CardComponent } from "theme/additions/card/card";
+import CategoriesForm from "./CategoriesForm";
+// import CategoriesForm from "./SectorForm";
+
 
 export default function Notifications(props) {
   const { ...rest } = props;
@@ -24,11 +27,11 @@ export default function Notifications(props) {
           fontWeight='bold'
           fontSize='2xl'
           mb='4px'>
-          Sectors
+          Categories
         </Text>
         <Menu />
       </Flex>
-      <SectorForm />
+      <CategoriesForm />
     </Card >
   );
 }

@@ -1,8 +1,37 @@
-const mongoose = require('mongoose');
-slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
 
-const sectorsSchema = new mongoose.Schema({
+
+
+
+
+const mongoose = require('mongoose');
+const validate = require('mongoose-validator');
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
+const { sendCustomError } = require('../helper/response');
+const bcrypt = require('bcryptjs');
+// const nameValidator = [
+//     validate({
+//         validator: 'isLength',
+//         arguments: [0, 40],
+//         message: 'Name must not exceed {ARGS[1]} characters.'
+//     })
+// ];
+
+// const emailValidator = [
+//     validate({
+//         validator: 'isLength',
+//         arguments: [0, 60],
+//         message: 'Email must not exceed {ARGS[1]} characters.'
+//     }),
+//     validate({
+//         validator: 'isEmail',
+//         message: 'Email must be valid.'
+//     })
+// ];
+
+
+
+const UserSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Sector title is required.'],
@@ -12,14 +41,14 @@ const sectorsSchema = new mongoose.Schema({
         slug: "title",
         unique: true
     },
-    image: {
-        type: String
-    },
-    description: {
-        type: String,
-        trim: true,
-        required: false,
-    },
+    // image: {
+    //     type: String
+    // },
+    // description: {
+    //     type: String,
+    //     trim: true,
+    //     required: false,
+    // },
     shortDescription: {
         type: String,
         trim: true,
@@ -35,10 +64,6 @@ const sectorsSchema = new mongoose.Schema({
         required: false,
         trim: true
     },
-    featured: {
-        type: Boolean,
-        enum: ['True', 'False'],
-    },
     status: {
         type: String,
         enum: ['ACTIVE', 'INACTIVE'],
@@ -46,5 +71,6 @@ const sectorsSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const sectors = new mongoose.model('Sector', sectorsSchema)
-module.exports = sectors;
+
+
+module.exports = { Sectors: db.model('sector', UserSchema), ObjectId };

@@ -50,7 +50,7 @@ export default function Settings() {
           columnsData={columnsDataDevelopment}
           tableData={tableDataDevelopment}
         />
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
+        {/* <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
         <ColumnsTable
           columnsData={columnsDataColumns}
           tableData={tableDataColumns}
@@ -58,7 +58,7 @@ export default function Settings() {
         <ComplexTable
           columnsData={columnsDataComplex}
           tableData={tableDataComplex}
-        />
+        /> */}
       </SimpleGrid>
     </Box>
   );

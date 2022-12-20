@@ -1,51 +1,48 @@
-const Users = require("../models/users");
+const { Users } = require("../models/users");
 const jwt = require("jsonwebtoken");
 const { PRIVATE_KEY } = require('..//config/index');
 
-const checkAuth = async (req, res, next) => {
-    let token
-    const { authorization } = req.headers
-    if (authorization && authorization.startsWith('Bearer')) {
-        try {
-            // Getting token from header
-            token = authorization.split(' ')[1]
 
-            // JWT Verify
-            const { userID } = jwt.verify(token, PRIVATE_KEY)
+const userAuth = (req, res, next) => {
+    const deviceType = req.headers['devicetype'] ? req.headers['devicetype'] : 'web';
+    const deviceToken = req.headers['devicetoken'] ? req.headers['devicetoken'] : '';
+    const token = req.headers['Authorization'] || req.headers['authorization'];
+    const locale = req.headers['locale'] ? req.headers['locale'] : 'en';
+    console.log("token", token)
 
-            // Get User from Token
-            req.user = await Users.findById(userID).select('-password')
-            next()
-        } catch (error) {
-            res.send({ "status": "failed", "message": "Unauthorized User" })
-        }
-    }
     if (!token) {
-        res.send({ "status": "failed", "message": "Unauthorized User, No Token!" })
+        return sendCustomError("", res, 401, "No token provided.");
+    } else {
+        jwt.verify(token, PRIVATE_KEY, async function (error, decoded) {
+            if (error) {
+                console.log("error", error)
+
+                sendCustomError(error, res, 401, "Invalid token.");
+            } else if (decoded.userId == 0 || undefined || '') {
+                console.log("decoded.userId", decoded.userId)
+
+                sendCustomError(error, res, 401, "User doesn't exist.");
+            } else {
+                const result = await Users.findOne({ accessToken: token });
+                console.log("result", result)
+                if (result) {
+
+                    req.data = {
+                        userId: decoded.userId,
+                        email: decoded.email,
+                        token: token,
+                        deviceType: deviceType,
+                        deviceToken: deviceToken
+                    }
+                    return next();
+
+                } else {
+                    sendCustomError(error, res, 401, "User session expired.");
+                }
+            }
+        })
     }
-}
+};
 
 
-// isAdmin Middleware
-// const isAdmin = async (req, res, next) => {
-//     let token
-//     const { authorization } = req.headers
-//     if (!token) {
-//         res.send({ "status": "failed", "message": "Unauthorized User, No Token!" })
-//     }
-//     if (authorization && authorization.startsWith('Bearer')) {
-//         // Getting token from header
-//         token = authorization.split(' ')[1]
-
-//         // JWT Verify
-//         const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY)
-//         req.user = await Users.findById(userID)
-//         if (req.user.role === 0) {
-//             res.send({ "status": "failed", "message": "Unauthorized User, You must be an Admin!" })
-//         }
-//     }
-//     next()
-// }
-
-module.exports = checkAuth;
-// module.exports = isAdmin;
+module.exports = userAuth

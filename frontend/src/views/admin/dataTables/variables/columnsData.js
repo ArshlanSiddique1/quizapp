@@ -1,20 +1,24 @@
 export const columnsDataDevelopment = [
   {
-    Header: "NAME",
-    accessor: "name",
+    Header: "TITLE",
+    accessor: "title",
   },
   {
-    Header: "TECH",
-    accessor: "tech",
+    Header: "SLUG",
+    accessor: "slug",
   },
   {
-    Header: "DATE",
-    accessor: "date",
+    Header: "META TITLE",
+    accessor: "metaTitle",
   },
   {
-    Header: "PROGRESS",
-    accessor: "progress",
+    Header: "STATUS",
+    accessor: "status",
   },
+  // {
+  //   Header: "STATUS",
+  //   accessor: "progress",
+  // },
 ];
 
 export const columnsDataCheck = [

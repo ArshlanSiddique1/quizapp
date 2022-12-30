@@ -1,0 +1,10 @@
+.dropDown{
+    border: 1px solid #e2e8f0;
+    outline:none;
+    border-radius:12px;
+    padding:8px ;
+}
+
+.dropDown option:hover{
+   background:red;
+}

@@ -1,12 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = new express.Router();
-const Sections = require("../../models/sections");
+const { Sections } = require("../../models/sections");
+const { sendSuccess, sendCustomError } = require("../../helper/response");
+
 
 
 // Create Sections
 const register = async (req, res) => {
     try {
+        console.log("boddyy", req.body)
         const sectionsDetails = new Sections({
             sector_id: req.body.sector_id,
             category_id: req.body.category_id,
@@ -18,12 +21,16 @@ const register = async (req, res) => {
             shortDescription: req.body.shortDescription,
             metaTitle: req.body.metaTitle,
             metaDescription: req.body.metaDescription,
-            status: req.body.status,
+            status: req.body.status
         });
+        console.log("boddyy", req.body)
         const sectionsData = await sectionsDetails.save();
         res.status(200).send({ "status": "success", "mesage": "Section Inserted !", "Data": sectionsData })
     } catch (error) {
-        res.status(400).send({ "status": "failed", error })
+        console.log(error)
+        return sendCustomError({ error }, res, 400, 'Status : failed')
+
+
     }
 }
 

@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
-slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
-
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
 const sectionSchema = new mongoose.Schema({
     sector_id: {
         type: String,
-        required: true
+        required: false
     },
     category_id: {
         type: String,
-        required: true
+        required: false
     },
     grade_id: {
         type: String,
-        required: true
+        required: false
     },
     subject_id: {
         type: String,
-        required: true
+        required: false
     },
     title: {
         type: String,
@@ -57,6 +56,4 @@ const sectionSchema = new mongoose.Schema({
         default: 'ACTIVE'
     }
 }, { timestamps: true });
-
-const sections = new mongoose.model('Section', sectionSchema)
-module.exports = sections;
+module.exports = {Sections: db.model('section', sectionSchema), ObjectId };

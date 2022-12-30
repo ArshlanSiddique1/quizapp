@@ -1,30 +1,30 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const router = new express.Router();
-const Category = require("../../models/categories");
+const { Categorys } = require("../../models/categories");
+// const { sendSuccess, sendCustomError } = require("../../helper/response");
+
 
 // Create Category
 const register = async (req, res) => {
     try {
-        const CategoryDeails = new Category({
-            sector_id: req.body.sector_id,
+        const categoryDetails = new Categorys({
+            sector_id:req.body.sector_id,
             title: req.body.title,
             image: req.body.image,
             description: req.body.description,
             shortDescription: req.body.shortDescription,
             metaTitle: req.body.metaTitle,
             metaDescription: req.body.metaDescription,
-            featured: req.body.featured,
             status: req.body.status,
+            featured: req.body.featured,
             subscription: req.body.subscription
         });
-        const CategoryData = await CategoryDeails.save();
-        res.status(200).send({ "status": "success", "mesage": "Category Inserted !", "Data": CategoryData })
+        const categoryData = await categoryDetails.save();
+        res.status(200).send({ "status": "success", "mesage": "Category Details Inserted !", "Data": categoryData })
     } catch (error) {
+        console.log(error)
         res.status(400).send({ "status": "failed", error })
     }
 }
-
 
 // Read Category
 const view = async (req, res) => {
@@ -59,7 +59,7 @@ const view = async (req, res) => {
     const offset = parseInt((current_page - 1) * per_page);
 
     try {
-        const CategoryDetailsAll = await Category.find(conditions).sort(order_by).limit(per_page).skip(offset);
+        const CategoryDetailsAll = await Categorys.find(conditions).sort(order_by).limit(per_page).skip(offset);
         res.status(200).send({ "status": "success", "message": "category Details", CategoryDetailsAll })
     } catch (error) {
         res.status(400).send({ "status": "Failed", "message": "Error in Fetching Details", error })
@@ -70,7 +70,7 @@ const view = async (req, res) => {
 // Read indivisually Category
 const viewOne = async (req, res) => {
     const { category_id } = req.params;
-    const CategoryDetails = await Category.findOne({ _id: category_id })
+    const CategoryDetails = await Categorys.findOne({ _id: category_id })
     if (CategoryDetails) {
         return (
             res.status(200).send({ "status": "success", "message": "category Details", "data": CategoryDetails })
@@ -86,12 +86,12 @@ const update = async (req, res) => {
     const { sector_id, title, slug, image, descripton, shortDescription, metaTitle, metaDescription, featured, status, subscription } = req.body;
     const { category_id } = req.params;
     try {
-        const CategoryDetails = await Category.findOne({ _id: category_id });
+        const CategoryDetails = await Categorys.findOne({ _id: category_id });
         if (category_id) {
-            const categoryData = await Category.findOneAndUpdate({ _id: CategoryDetails.id },
+            const categoryData = await Categorys.findOneAndUpdate({ _id: CategoryDetails.id },
                 { $set: { sector_id, title, slug, image, descripton, shortDescription, metaTitle, metaDescription, featured, status, subscription } },
                 { new: true });
-            await Category.findOne({ _id: CategoryDetails.id }).then(result => {
+            await Categorys.findOne({ _id: CategoryDetails.id }).then(result => {
                 return res.send({ "status": "success", "message": "Updated Successfully", "Data": result })
             })
         } else {
@@ -106,9 +106,9 @@ const update = async (req, res) => {
 // Delete indivisually Category
 const destroy = async (req, res) => {
     const { category_id } = req.params;
-    const CategoryDetails = await Category.findOne({ _id: category_id });
+    const CategoryDetails = await Categorys.findOne({ _id: category_id });
     if (CategoryDetails) {
-        await Category.findOneAndDelete({ _id: category_id });
+        await Categorys.findOneAndDelete({ _id: category_id });
         return res.send({ "status": "success", "message": "Deleted Successfully", "Data": CategoryDetails })
     } else {
         res.send({ "status": "Failed", "message": "Error in Deleting Details" })

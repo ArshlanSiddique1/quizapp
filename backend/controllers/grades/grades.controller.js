@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = new express.Router();
-const Grades = require("../../models/grades");
+
+const { Grades } = require("../../models/grades");
 
 
 // Create Grades
@@ -16,6 +17,7 @@ const register = async (req, res) => {
         const gradesData = await gradesDetails.save();
         res.status(200).send({ "status": "success", "mesage": "Grade Details Inserted !", "Data": gradesData })
     } catch (error) {
+        console.log(error)
         res.status(400).send({ "status": "failed", error })
     }
 }

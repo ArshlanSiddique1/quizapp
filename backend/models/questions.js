@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 slug = require('mongoose-slug-updater'),
     mongoose.plugin(slug);
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
 
 const questionSchema = new mongoose.Schema({
     sector_id: {
@@ -39,7 +41,7 @@ const questionSchema = new mongoose.Schema({
                 type: String,
             },
             isCorrect: {
-                type: Boolean,
+                type: String,
                 default: false
             }
         },
@@ -47,7 +49,6 @@ const questionSchema = new mongoose.Schema({
     difficulty: {
         type: String,
         enum: ['Beginner', 'Intermediate', 'Advanced'],
-        default: 'Beginner'
     },
     status: {
         type: String,
@@ -55,6 +56,4 @@ const questionSchema = new mongoose.Schema({
         default: 'ACTIVE'
     }
 }, { timestamps: true });
-
-const questions = new mongoose.model('Question', questionSchema)
-module.exports = questions;
+module.exports = { Questions: db.model('question', questionSchema), ObjectId };

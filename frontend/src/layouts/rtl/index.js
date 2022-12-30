@@ -20,6 +20,8 @@ export default function Dashboard(props) {
   const getRoute = () => {
     return window.location.pathname !== "/rtl/full-screen-maps";
   };
+
+
   const getActiveRoute = (routes) => {
     let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
@@ -43,6 +45,8 @@ export default function Dashboard(props) {
     }
     return activeRoute;
   };
+
+
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {

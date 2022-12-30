@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = new express.Router();
-const Questions = require("../../models/questions");
+const { Questions } = require("../../models/questions");
 
 
 // Create Questions
@@ -16,7 +16,11 @@ const register = async (req, res) => {
             title: req.body.title,
             explanation: req.body.explanation,
             year: req.body.year,
-            options: req.body.options,
+            options:
+            {
+                title: req.body.titles,
+                isCorrect: req.body.isCorrect,
+            },
             difficulty: req.body.difficulty,
             status: req.body.status
         });
@@ -93,6 +97,7 @@ const viewOne = async (req, res) => {
 
 // Update indivisually Questions
 const update = async (req, res) => {
+    console.log("Im here")
     const { sector_id, category_id, grade_id, subject_id, section_id, title, explanation, year, options, difficulty, status } = req.body;
     const { question_id } = req.params;
     try {

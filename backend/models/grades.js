@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
 
 const gradeSchema = new mongoose.Schema({
     name: {
@@ -16,8 +16,8 @@ const gradeSchema = new mongoose.Schema({
         type: String
     },
     featured: {
-        type: Boolean,
-        enum: ['True', 'False'],
+        type: String,
+        enum: ['TRUE', 'FALSE'],
     },
     status: {
         type: String,
@@ -26,5 +26,5 @@ const gradeSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const grades = new mongoose.model('Grade', gradeSchema)
-module.exports = grades;
+
+module.exports = { Grades: db.model('grade', gradeSchema), ObjectId }

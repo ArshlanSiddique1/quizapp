@@ -1,25 +1,25 @@
-export const columnsDataDevelopment = [
-  {
-    Header: "TITLE",
-    accessor: "title",
-  },
-  {
-    Header: "SLUG",
-    accessor: "slug",
-  },
-  {
-    Header: "META TITLE",
-    accessor: "metaTitle",
-  },
-  {
-    Header: "STATUS",
-    accessor: "status",
-  },
-  // {
-  //   Header: "STATUS",
-  //   accessor: "progress",
-  // },
-];
+// export const columnsDataDevelopment = [
+//   {
+//     Header: "TITLE",
+//     accessor: "title",
+//   },
+//   {
+//     Header: "SLUG",
+//     accessor: "slug",
+//   },
+//   {
+//     Header: "STATUS",
+//     accessor: "status",
+//   },
+//   {
+//     Header: "DATE",
+//     accessor: "createdAt",
+//   },
+//   {
+//     Header: "ACTION",
+//     accessor: "_id",
+//   },
+// ];
 
 export const columnsDataCheck = [
   {

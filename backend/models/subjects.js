@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
+mongoose.plugin(slug);
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
 
 const subjectSchema = new mongoose.Schema({
     sector_id: {
         type: String,
-        required: true
+        required: false
     },
     category_id: {
         type: String,
-        required: true
+        required: false
     },
     grade_id: {
         type: String,
-        required: true
+        required: false
     },
     title: {
         type: String,
@@ -48,8 +50,8 @@ const subjectSchema = new mongoose.Schema({
         trim: true
     },
     featured: {
-        type: Boolean,
-        enum: ['True', 'False'],
+        type: String,
+        enum: ['TRUE', 'FALSE'],
     },
     status: {
         type: String,
@@ -58,5 +60,5 @@ const subjectSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Subjects = new mongoose.model('Subject', subjectSchema)
-module.exports = Subjects;
+
+module.exports = { Subjects: db.model('subject', subjectSchema), ObjectId };

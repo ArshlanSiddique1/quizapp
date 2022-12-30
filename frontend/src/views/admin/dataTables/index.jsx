@@ -23,42 +23,72 @@
 // Chakra imports
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import DevelopmentTable from "views/admin/dataTables/components/DevelopmentTable";
-import CheckTable from "views/admin/dataTables/components/CheckTable";
-import ColumnsTable from "views/admin/dataTables/components/ColumnsTable";
-import ComplexTable from "views/admin/dataTables/components/ComplexTable";
-import {
-  columnsDataDevelopment,
-  columnsDataCheck,
-  columnsDataColumns,
-  columnsDataComplex,
-} from "views/admin/dataTables/variables/columnsData";
-import tableDataDevelopment from "views/admin/dataTables/variables/tableDataDevelopment.json";
-import tableDataCheck from "views/admin/dataTables/variables/tableDataCheck.json";
-import tableDataColumns from "views/admin/dataTables/variables/tableDataColumns.json";
-import tableDataComplex from "views/admin/dataTables/variables/tableDataComplex.json";
+//import DevelopmentTable from "views/admin/sector/components/sectors";
+
+// import {
+//   columnsDataDevelopment,
+
+// } from "views/admin/dataTables/variables/columnsData";
 import React from "react";
+import { useEffect, useState } from "react";
+import { getSector } from "../../../services/sector";
+import { delSector } from "../../../services/sector";
+import { Button } from "@chakra-ui/react";
+
+export const columnsDataDevelopment = [
+  {
+    Header: "TITLE",
+    accessor: "title",
+  },
+  {
+    Header: "SLUG",
+    accessor: "slug",
+  },
+  {
+    Header: "STATUS",
+    accessor: "status",
+  },
+  {
+    Header: "DATE",
+    accessor: "createdAt",
+  },
+  {
+    Header: "ACTION",
+    accessor: "_id",
+  },
+];
+
 
 export default function Settings() {
+
+  useEffect(() => {
+    sectors();
+  }, []);
+
+  const [tableDataDevelopment, setSectorData] = useState([]);
+  const sectors = async () => {
+    const Mydata = await getSector();
+    setSectorData(Mydata?.data?.data)
+  }
+
+  useEffect(() => {
+  }, []);
+  const OnClickDelete = async (index) => {
+    console.log("IndexxxxxxxxxHellllllloxxx", index)
+  }
+
   // Chakra Color Mode
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
         mb='20px'
-        columns={{ sm: 1, md: 2 }}
+        columns={{ sm: 1, md: 1 }}
         spacing={{ base: "20px", xl: "20px" }}>
         <DevelopmentTable
           columnsData={columnsDataDevelopment}
           tableData={tableDataDevelopment}
+          OnClickDelete={(val) => OnClickDelete(val)}
         />
-        {/* <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <ColumnsTable
-          columnsData={columnsDataColumns}
-          tableData={tableDataColumns}
-        />
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        /> */}
       </SimpleGrid>
     </Box>
   );

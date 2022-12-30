@@ -1,13 +1,3 @@
-// const mongoose = require("mongoose");
-// const { mongodbUserUri } = require("../config");
-
-
-// mongoose.connect(`${mongodbUserUri}`).then(() => {
-//     console.log("connection connected successfully");
-
-// }).catch((e) => {
-//     console.log(`Not Connected ! ${e}`)
-// })
 
 const mongoose = require('mongoose');
 const config = require('../config');
@@ -17,13 +7,12 @@ mongoose.Promise = global.Promise;
 const connections = {};
 
 function createConnection(mongoUri) {
+
     if (connections[mongoUri]) {
         return connections[mongoUri];
     }
 
     const connection = mongoose.createConnection(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-    // mongoose.set('useCreateIndex', true);
-    // mongoose.set('useFindAndModify', false);
 
     connection.on('connected', () => {
         console.log(`Database connection is open to "${mongoUri}"`);

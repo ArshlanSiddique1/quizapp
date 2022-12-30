@@ -3,9 +3,8 @@ const { Sectors } = require("../../models/sectors");
 
 
 const create = async (req, res) => {
-    let { title, slug, shortDescription, metaTitle, metaDescription, status } = req.body;
-    // console.log(name)
-    let requestData = { title, slug, shortDescription, metaTitle, metaDescription, status };
+    let { title, slug, shortDescription, description, metaTitle, metaDescription, status } = req.body;
+    let requestData = { title, slug, shortDescription,description, metaTitle, metaDescription, status };
     let newSectors = new Sectors(requestData);
 
     newSectors.save(async (err, data) => {
@@ -23,8 +22,6 @@ const create = async (req, res) => {
         }
 
     })
-
-
 }
 
 
@@ -86,13 +83,13 @@ const viewOne = async (req, res) => {
 
 // Update indivisually Sectors
 const update = async (req, res) => {
-    const { title, slug, image, descripton, shortDescription, metaTitle, metaDescription, featured, status } = req.body;
+    const { title, metaTitle, metaDescription, status } = req.body;
     const { sector_id } = req.params;
     try {
         const sectorDetails = await Sectors.findOne({ _id: sector_id });
         if (sector_id) {
             const sector = await Sectors.findOneAndUpdate({ _id: sectorDetails.id },
-                { $set: { title, slug, image, descripton, shortDescription, metaTitle, metaDescription, featured, status } },
+                { $set: { title, metaTitle, metaDescription, status } },
                 { new: true });
             await Sectors.findOne({ _id: sectorDetails.id }).then(result => {
                 return res.send({ "status": "success", "message": "Updated Successfully", "Data": result })
@@ -101,7 +98,9 @@ const update = async (req, res) => {
             res.send({ "status": "Failed", "message": "Error: Sector id not found" })
         }
     } catch (error) {
-        res.status(500).send({ "status": "Failed", "message": "Error in Updating Details" })
+        return sendCustomError({error}, res, 500, 'Error in adding Data.')
+
+        // res.status(500).send({ "status": "Failed", "message": "Error in Updating Details" })
     }
 }
 

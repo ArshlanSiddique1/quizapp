@@ -8,11 +8,11 @@ const userAuth = require("../../../middleware/auth-middleware");
 
 
 // Public Routes
-router.post('/register', userAuth, gradesController.register);
-router.get('/view', gradesController.view);
-router.get('/view/:grade_id', gradesController.viewOne);
-router.put('/update/:grade_id', userAuth, gradesController.update);
-router.patch('/update/:grade_id', userAuth, gradesController.update);
-router.delete('/delete/:grade_id', userAuth, gradesController.destroy);
+router.post('/', gradesController.register);
+router.get('/', gradesController.view);
+router.get('/:grade_id', gradesController.viewOne);
+router.put('/:grade_id', userAuth, gradesController.update);
+router.patch('/:grade_id', userAuth, gradesController.update);
+router.delete('/:grade_id', userAuth, gradesController.destroy);
 
 module.exports = router;

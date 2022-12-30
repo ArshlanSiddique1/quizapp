@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = new express.Router();
-const Subjects = require("../../models/subjects");
+const {Subjects} = require("../../models/subjects");
+const { sendSuccess, sendCustomError } = require("../../helper/response");
 
 
 // Create Subjects
@@ -17,15 +18,16 @@ const register = async (req, res) => {
             shortDescription: req.body.shortDescription,
             metaTitle: req.body.metaTitle,
             metaDescription: req.body.metaDescription,
-            featured: req.body.featured,
-            status: req.body.status
+            status: req.body.status,
+            featured: req.body.featured
 
         });
+    
+        
         const subjectData = await subjectDetails.save();
         res.status(200).send({ "status": "success", "mesage": "Subject Inserted !", "Data": subjectData })
     } catch (error) {
-        res.status(400).send({ "status": "failed", error })
-    }
+        return sendCustomError({error}, res, 500, 'Error in adding Data.')}
 }
 
 

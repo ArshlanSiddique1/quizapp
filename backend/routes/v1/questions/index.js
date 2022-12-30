@@ -8,11 +8,11 @@ const userAuth = require("../../../middleware/auth-middleware");
 
 
 // Public Routes
-router.post('/register', userAuth, questionsController.register);
-router.get('/view', questionsController.view);
-router.get('/view/:question_id', questionsController.viewOne);
-router.put('/update/:question_id', userAuth, questionsController.update);
-router.patch('/update/:question_id', userAuth, questionsController.update);
-router.delete('/delete/:question_id', userAuth, questionsController.destroy);
+router.post('/', userAuth, questionsController.register);
+router.get('/', questionsController.view);
+router.get('/:question_id', questionsController.viewOne);
+router.put('/:question_id', userAuth, questionsController.update);
+router.patch('/:question_id', userAuth, questionsController.update);
+router.delete('/:question_id', userAuth, questionsController.destroy);
 
 module.exports = router;

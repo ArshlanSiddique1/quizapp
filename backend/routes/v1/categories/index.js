@@ -9,7 +9,7 @@ const userAuth = require("../../../middleware/auth-middleware");
 
 
 // Public Routes
-router.post('/', userAuth, categoryController.register);
+router.post('/', categoryController.register);
 router.get('/', categoryController.view);
 router.get('/:category_id', categoryController.viewOne);
 router.put('/:category_id', userAuth, categoryController.update);

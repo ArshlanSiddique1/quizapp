@@ -1,7 +1,6 @@
-const { string } = require("joi");
-const mongoose = require("mongoose");
-slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+const db = require('../config/database').getUserDB();
 
 const categorySchema = new mongoose.Schema({
     sector_id: {
@@ -11,14 +10,13 @@ const categorySchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Category title is required.'],
+    }, 
+    image: {
+        type: String
     },
     slug: {
         type: String,
         slug: "title",
-        unique: true
-    },
-    image: {
-        type: String
     },
     description: {
         type: String,
@@ -27,8 +25,8 @@ const categorySchema = new mongoose.Schema({
     },
     shortDescription: {
         type: String,
-        trim: true,
-        required: false
+        required: false,
+        trim: true
     },
     metaTitle: {
         type: String,
@@ -42,21 +40,32 @@ const categorySchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['ACTIVE', 'INACTIVE'],
+        // enum: ['ACTIVE', 'INACTIVE'],
         default: 'ACTIVE'
     },
     featured: {
-        type: Boolean,
-        enum: ['True', 'False'],
+        type: String,
+        // enum: ['TRUE', 'FALSE'],
         default: 'TRUE'
     },
     subscription: {
         type: String,
-        enum: ['PREMIUM', 'FREE'],
+        // enum: ['PREMIUM', 'FREE'],
         default: 'FREE'
     }
 }, { timestamps: true });
 
 
-const Category = new mongoose.model('Category', categorySchema)
-module.exports = Category;
+
+module.exports = { Categorys: db.model('category', categorySchema), ObjectId };
+
+
+
+
+
+
+
+
+
+
+

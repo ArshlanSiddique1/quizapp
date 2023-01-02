@@ -22,6 +22,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { NavLink } from "react-router-dom";
 export default function DevelopmentTable(props) {
   const { columnsData, tableData, OnClickDelete, OnClickEdit } = props;
   // console.log({ tableData });
@@ -65,9 +66,8 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           Questions TABLE
         </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD NEW QUESTION</Button>
-        </Link>
+        <NavLink to="/admin/Questions"><Button>ADD NEW QUESTION</Button></NavLink>
+
 
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
@@ -155,7 +155,6 @@ export default function DevelopmentTable(props) {
                           w='max-content'
                           _focus={{ boxShadow: 'none' }}
                           onClick={() => OnClickDelete(cell.value)}>
-                          <i className="fa fa-trash"></i>
                           Delete
                         </Button>
                         <span> || </span>

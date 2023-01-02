@@ -1,10 +1,15 @@
 /* eslint-disable */
-import{Flex,Table,Tbody,Td,Text,Th,Thead,Tr,useColorModeValue,Button,}from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, Button, } from "@chakra-ui/react";
 // Custom components
 import Card from "components/card/Card";
 import React, { useMemo } from "react";
 import { Link } from '@chakra-ui/react'
-import {useGlobalFilter,usePagination,useSortBy,useTable,}from "react-table";
+import { useGlobalFilter, usePagination, useSortBy, useTable, } from "react-table";
+import CreateSector from "views/admin/sector/components/add";
+import { Dashboard } from "../../../../../../src/layouts/admin/index"
+import { NavLink } from "react-router-dom";
+
+
 export default function DevelopmentTable(props) {
   const { columnsData, tableData, OnClickDelete, OnClickEdit } = props;
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -45,10 +50,7 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           Sectors Table
         </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD SECTORS</Button>
-        </Link>
-
+        <NavLink to="/admin/CreateSector"><Button>ADD SECTORS</Button></NavLink>
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
         <Thead>

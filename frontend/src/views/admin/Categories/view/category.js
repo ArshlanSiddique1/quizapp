@@ -22,7 +22,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import SectorForm from "../add/CategoryForm";
+import { NavLink } from "react-router-dom";
 
 
 export default function DevelopmentTable(props) {
@@ -72,9 +72,7 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           Categories Table
         </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD NEW CATEGORY</Button>
-        </Link>
+        <NavLink to="/admin/Categories"><Button>ADD NEW CATEGORY</Button></NavLink>
 
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

@@ -22,6 +22,9 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import Grades from "views/admin/grades/add"
+import { NavLink } from "react-router-dom";
+
 
 
 export default function DevelopmentTable(props) {
@@ -71,9 +74,8 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           Grades Table
         </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD NEW GRADE</Button>
-        </Link>
+        <NavLink to="/admin/Grades"><Button>ADD NEW GRADE</Button></NavLink>
+
 
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

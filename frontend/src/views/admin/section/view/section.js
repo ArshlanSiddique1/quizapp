@@ -22,6 +22,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { NavLink } from "react-router-dom";
 export default function DevelopmentTable(props) {
   const { columnsData, tableData, OnClickDelete, OnClickEdit } = props;
 
@@ -64,11 +65,8 @@ export default function DevelopmentTable(props) {
           fontWeight='700'
           lineHeight='100%'>
           Section Table
-        </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD NEW SECTION</Button>
-        </Link>
-
+        </Text>    
+        <NavLink to="/admin/Sections"><Button>ADD NEW SECTION</Button></NavLink>
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
         <Thead>

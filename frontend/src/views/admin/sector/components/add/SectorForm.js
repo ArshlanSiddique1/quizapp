@@ -15,7 +15,7 @@ import {
 import Upload from "./Upload";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
-import { setSector,getSectorById } from "../../../../../services/sector";
+import { setSector } from "../../../../../services/sector";
 
 
 export default function SectorForm(props) {

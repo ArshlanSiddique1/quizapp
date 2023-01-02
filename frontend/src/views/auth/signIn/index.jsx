@@ -46,7 +46,7 @@ function SignIn() {
     if (userInfo) {
       history.push("/");
     }
-  }, []);
+  },[]);
 
   // For Axios Post Login
   const userLogin = async (values) => {
@@ -56,7 +56,7 @@ function SignIn() {
           let data = response.data.result.data;
           if (data) {
             await setUserData(data);
-            window.location = "/dashboard";
+            window.location = "/";
           }
           actions.resetForm();
         })

@@ -78,7 +78,6 @@ export default function Settings() {
         )
       }
     })
-    console.log("Index_Id", index)
     try {
       await delSubject(index).then(async (response) => {
         console.log("Response ", response)

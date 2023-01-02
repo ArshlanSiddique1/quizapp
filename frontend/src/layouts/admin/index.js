@@ -1,139 +1,49 @@
 // Chakra imports
-import { Portal, Box, useDisclosure } from "@chakra-ui/react";
+import { Portal, Box, } from "@chakra-ui/react";
 import Footer from "components/footer/FooterAdmin.js";
 // Layout components
 import Navbar from "components/navbar/NavbarAdmin.js";
 import Sidebar from "components/sidebar/Sidebar.js";
 import { SidebarContext } from "contexts/SidebarContext";
 import React, { useEffect, useState } from "react";
-import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import routes from "routes.js";
+import MainDashboard from "views/admin/default";
+import Sectors from "views/admin/sector/components/view";
+import CreateSector from "views/admin/sector/components/add";
+import Categories from "views/admin/Categories/add";
+import ViewCategory from "views/admin/Categories/view"
+import Grades from "views/admin/grades/add"
+import ViewGrade from "views/admin/grades/view"
+import Subjects from "views/admin/subject/add"
+import ViewSubjects from "views/admin/subject/view"
+import Sections from "views/admin/section/add"
+import ViewSection from "views/admin/section/view"
+import Questions from "views/admin/question/add"
+import ViewQuestion from "views/admin/question/view"
+
+
 
 
 // Custom Chakra theme
 export default function Dashboard(props) {
 
+
   const history = useHistory();
   useEffect(() => {
     const userInfo = localStorage.getItem("UsersData");
     if (userInfo) {
-      history.push("/admin/default");
+      history.push("/");
     }
     if (!userInfo) {
-      history.replace("/auth");
+      history.replace("/singIn");
     }
-  }, []);
+  },[]);
 
   const { ...rest } = props;
   // states and functions
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  // functions for changing the states from components
-  const getRoute = () => {
-    return window.location.pathname !== "/admin/full-screen-maps";
-  };
-
-  const getActiveRoute = (routes) => {
-    let activeRoute = "Default Brand Text";
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveRoute = getActiveRoute(routes[i].items);
-        if (collapseActiveRoute !== activeRoute) {
-          return collapseActiveRoute;
-        }
-      } else if (routes[i].category) {
-        let categoryActiveRoute = getActiveRoute(routes[i].items);
-        if (categoryActiveRoute !== activeRoute) {
-          return categoryActiveRoute;
-        }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].name;
-        }
-      }
-    }
-    return activeRoute;
-  };
-
-
-  const getActiveNavbar = (routes) => {
-    let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveNavbar = getActiveNavbar(routes[i].items);
-        if (collapseActiveNavbar !== activeNavbar) {
-          return collapseActiveNavbar;
-        }
-      } else if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbar(routes[i].items);
-        if (categoryActiveNavbar !== activeNavbar) {
-          return categoryActiveNavbar;
-        }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].secondary;
-        }
-      }
-    }
-    return activeNavbar;
-  };
-
-
-
-  const getActiveNavbarText = (routes) => {
-    let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].collapse) {
-        let collapseActiveNavbar = getActiveNavbarText(routes[i].items);
-        if (collapseActiveNavbar !== activeNavbar) {
-          return collapseActiveNavbar;
-        }
-      } else if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbarText(routes[i].items);
-        if (categoryActiveNavbar !== activeNavbar) {
-          return categoryActiveNavbar;
-        }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].messageNavbar;
-        }
-      }
-    }
-    return activeNavbar;
-  };
-
-
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      if (prop.collapse) {
-        return getRoutes(prop.items);
-      }
-      if (prop.category) {
-        return getRoutes(prop.items);
-      } else {
-        return null;
-      }
-    });
-  };
-  document.documentElement.dir = "ltr";
-  const { onOpen } = useDisclosure();
-
-
 
   return (
     <Box>
@@ -159,30 +69,78 @@ export default function Dashboard(props) {
           <Portal>
             <Box>
               <Navbar
-                onOpen={onOpen}
+                // onOpen={onOpen}
                 logoText={"Horizon UI Dashboard PRO"}
-                brandText={getActiveRoute(routes)}
-                secondary={getActiveNavbar(routes)}
-                message={getActiveNavbarText(routes)}
+                // brandText={getActiveRoute(routes)}
+                // secondary={getActiveNavbar(routes)}
+                // message={getActiveNavbarText(routes)}
                 fixed={fixed}
                 {...rest}
               />
             </Box>
           </Portal>
+          <Box
+            mx='auto'
+            p={{ base: "20px", md: "30px" }}
+            pe='20px'
+            minH='100vh'
+            pt='50px'>
+            {
+              props.location.pathname === "/default"
+                ?
+                <MainDashboard />
+                :
+                props.location.pathname === "/admin/Sectors"
+                  ?
+                  <Sectors /> :
 
-          {getRoute() ? (
-            <Box
-              mx='auto'
-              p={{ base: "20px", md: "30px" }}
-              pe='20px'
-              minH='100vh'
-              pt='50px'>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from='/' to='/admin/default' />
-              </Switch>
-            </Box>
-          ) : null}
+                  props.location.pathname === "/admin/CreateSector"
+                    ?
+                    <CreateSector /> :
+
+                    props.location.pathname === "/admin/Categories"
+                      ?
+                      <Categories /> :
+
+                      props.location.pathname === "/admin/ViewCategory"
+                        ?
+                        <ViewCategory /> :
+
+                        props.location.pathname === "/admin/Grades"
+                          ?
+                          <Grades /> :
+
+                          props.location.pathname === "/admin/ViewGrade"
+                            ?
+                            <ViewGrade /> :
+
+                            props.location.pathname === "/admin/Subjects"
+                              ?
+                              <Subjects /> :
+
+                              props.location.pathname === "/admin/ViewSubjects"
+                                ?
+                                <ViewSubjects /> :
+
+                                props.location.pathname === "/admin/Sections"
+                                  ?
+                                  <Sections /> :
+
+                                  props.location.pathname === "/admin/ViewSection"
+                                    ?
+                                    <ViewSection /> :
+
+                                    props.location.pathname === "/admin/Questions"
+                                      ?
+                                      <Questions /> :
+
+                                      props.location.pathname === "/admin/ViewQuestion"
+                                        ?
+                                        <ViewQuestion /> :
+
+                                        <MainDashboard />
+            }
+          </Box>
           <Box>
             <Footer />
           </Box>

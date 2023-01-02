@@ -33,7 +33,6 @@ export default function CategoryForm(props) {
 
   const CategoryAttribute = async (values) => {
     try {
-      console.log("vvvvv",values)
       await setCategory(values)
         .then(async (response) => {
           let data = response.data.result.data;
@@ -83,7 +82,7 @@ export default function CategoryForm(props) {
           
         <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
           <option selected disabled>Choose Sector Title</option>
-          {sectorId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))}
+          {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))}
         </select>
         </SimpleGrid>
 

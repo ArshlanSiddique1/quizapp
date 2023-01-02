@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { cancel } from "./Edit/QuestionFormUpdate"
 import { getQuestionById, delQuestion, getQuestion } from "../../../../services/question";
 import QuestionFormUpdate from "./Edit/QuestionFormUpdate";
-import { Alert } from "bootstrap";
 export const columnsDataDevelopment = [
   {
     Header: "TITLE",
@@ -61,10 +60,9 @@ export default function Settings() {
 
   // Delete By Id 
   const OnClickDelete = async (index) => {
-    Alert("Are Sure want to delete this field");
+    // Alert("Are Sure want to delete this field");
     try {
       await delQuestion(index).then(async (response) => {
-        console.log("Response ", response)
         if (response.status === "success") {
           Swal.fire({
             icon: 'success',

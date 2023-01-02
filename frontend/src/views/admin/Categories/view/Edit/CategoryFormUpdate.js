@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import { editCategory } from "../../../../../services/category";
 
 
-
 export default function CategoryFormUpdate(props) {
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
@@ -24,7 +23,7 @@ export default function CategoryFormUpdate(props) {
               title: 'Updated',
               text: `${response?.message}`
             })
-
+            window.location = "/dashboard";
           }
         })
         .catch((err) => {
@@ -263,22 +262,22 @@ export default function CategoryFormUpdate(props) {
           mb="8px"
           mt="20px"        >
           Featured<Text color={brandStars}>*</Text></FormLabel>
-            <RadioGroup defaultValue={`${props.data.featured}`}>
-              <HStack spacing="24px">
-                <Radio
-                  name="featured"
-                  value={"TRUE"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                >True</Radio>
-                <Radio
-                  name="featured"
-                  value={"FALSE"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                >False</Radio>
-              </HStack>
-            </RadioGroup>
+        <RadioGroup defaultValue={`${props.data.featured}`}>
+          <HStack spacing="24px">
+            <Radio
+              name="featured"
+              value={"TRUE"}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >True</Radio>
+            <Radio
+              name="featured"
+              value={"FALSE"}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >False</Radio>
+          </HStack>
+        </RadioGroup>
 
 
         <FormLabel
@@ -290,22 +289,22 @@ export default function CategoryFormUpdate(props) {
           mb="8px"
           mt="20px"        >
           Subscription<Text color={brandStars}>*</Text></FormLabel>
-            <RadioGroup defaultValue={`${props.data.subscription}`}>
-              <HStack spacing="24px">
-                <Radio
-                  name="subscription"
-                  value={"PREMIUM"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                >Premium</Radio>
-                <Radio
-                  name="subscription"
-                  value={"FREE"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                >Free</Radio>
-              </HStack>
-            </RadioGroup>
+        <RadioGroup defaultValue={`${props.data.subscription}`}>
+          <HStack spacing="24px">
+            <Radio
+              name="subscription"
+              value={"PREMIUM"}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >Premium</Radio>
+            <Radio
+              name="subscription"
+              value={"FREE"}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >Free</Radio>
+          </HStack>
+        </RadioGroup>
         <Button
           mt={4}
           colorScheme="brand"

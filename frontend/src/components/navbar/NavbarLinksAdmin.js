@@ -265,7 +265,7 @@ export default function HeaderLinks(props) {
               px='14px'>
               <Text fontSize='sm' onClick={() => {
                 localStorage.removeItem("UsersData");
-                history.push("/auth");
+                history.push("/singIn");
               }}>Log out</Text>
             </MenuItem>
           </Flex>

@@ -22,6 +22,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { NavLink } from "react-router-dom";
 
 
 export default function DevelopmentTable(props) {
@@ -70,10 +71,7 @@ export default function DevelopmentTable(props) {
           lineHeight='100%'>
           Subjects Table
         </Text>
-        <Link href='/CreateSector' isExternal>
-          <Button >ADD NEW SUBJECT</Button>
-        </Link>
-
+        <NavLink to="/admin/Subjects"><Button>ADD NEW SUBJECT</Button></NavLink>
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
         <Thead>

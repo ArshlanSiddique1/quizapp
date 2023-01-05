@@ -5,26 +5,33 @@ import Upload from "./Upload";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { setGrade } from "../../../../services/grade";
+import '../../../../assets/css/CustomCssForDropDown.css'
+import { useHistory } from "react-router-dom";
 
 
 
 export default function GradeForm(props) {
+  const history=useHistory()
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
   // Formik for form validation
-  
+
 
 
   const GradeAttribute = async (values) => {
     try {
       await setGrade(values)
         .then(async (response) => {
-          let data = response.data.result.data;
+          let data = response.data.Data;
           if (data) {
-            window.location = "/dashboard";
+            Swal.fire({
+              icon: "success",
+              title: "Submitted Successfully"
+            });  
+            history.push('/admin/ViewGrades')
           }
-          // actions.resetForm();
+
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
@@ -38,7 +45,7 @@ export default function GradeForm(props) {
           console.log({ err });
         });
     } catch (error) {
-      console.log("Error While Submitting: ", error);
+
     }
   };
 

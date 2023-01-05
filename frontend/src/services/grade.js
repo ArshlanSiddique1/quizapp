@@ -4,7 +4,6 @@ import { getToken } from './user';
 
 export async function setGrade(datas) {
     let tokenId = await getToken();
-    console.log("tokenId", tokenId)
     let data = JSON.stringify({
         "name": datas.gradeName,
         "status": datas.statusBtn,
@@ -26,10 +25,10 @@ export async function setGrade(datas) {
 
 
 
-export async function getGrade(data) {
+export async function getGrade(page, perPage, order) {
     let config = {
         method: 'get',
-        url: `${API_URL}/grades`,
+        url: `${API_URL}/grades/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -51,7 +50,6 @@ export async function getGradeById(id) {
     };
     const request = axios(config);
     const dataPromise = await request.then((response) => response);
-    console.log("dataPromise", dataPromise)
     return dataPromise;
 }
 

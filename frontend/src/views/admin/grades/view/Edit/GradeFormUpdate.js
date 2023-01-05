@@ -22,7 +22,7 @@ export default function CategoryFormUpdate(props) {
               title: 'Updated',
               text: `${response?.message}`
             })
-
+            props?.submit()
           }
         })
         .catch((err) => {
@@ -49,10 +49,13 @@ export default function CategoryFormUpdate(props) {
     // validationSchema: signInSchema,
     onSubmit: (values, action) => {
       GradeAttribute(values);
+
     },
   });
 
-
+  const cancel = () => {
+    props?.close()
+  }
 
 
 

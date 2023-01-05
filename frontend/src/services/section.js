@@ -3,8 +3,7 @@ import axios from 'axios';
 import { getToken } from './user';
 
 export async function setSection(datas) {
-    let tokenId = await getToken();
-    console.log("tokenId", tokenId)
+    let tokenId = await getToken(); 
     let data = JSON.stringify({
         "title": datas.title,
         "image":datas.image,
@@ -34,10 +33,10 @@ export async function setSection(datas) {
 
 
 
-export async function getSection(data) {
+export async function getSection(page,perPage,order) {
     let config = {
         method: 'get',
-        url: `${API_URL}/sections`,
+        url: `${API_URL}/sections/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },

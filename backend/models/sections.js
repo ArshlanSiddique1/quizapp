@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
+slug = require('mongoose-slug-updater'),
+    mongoose.plugin(slug);
 const sectionSchema = new mongoose.Schema({
     sector_id: {
         type: String,

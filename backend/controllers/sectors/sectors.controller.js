@@ -4,7 +4,7 @@ const { Sectors } = require("../../models/sectors");
 
 const create = async (req, res) => {
     let { title, slug, shortDescription, description, metaTitle, metaDescription, status } = req.body;
-    let requestData = { title, slug, shortDescription,description, metaTitle, metaDescription, status };
+    let requestData = { title, slug, shortDescription, description, metaTitle, metaDescription, status };
     let newSectors = new Sectors(requestData);
 
     newSectors.save(async (err, data) => {
@@ -41,7 +41,7 @@ const view = async (req, res) => {
     }
 
     // For pagination
-    const per_page = parseInt((req.query.per_page) ? req.query.per_page : 5);
+    const per_page = parseInt((req.query.per_page) ? req.query.per_page : 8);
     const offset = parseInt((current_page - 1) * per_page);
 
 
@@ -57,13 +57,36 @@ const view = async (req, res) => {
         }
     }
 
-    const SectorDetailsAll = await Sectors.find(conditions).sort(order_by).limit(per_page).skip(offset)
+    let total_records = await Sectors.count(conditions);
 
-    if (SectorDetailsAll.length > 0) {
-        res.status(200).send({ "status": "success", "message": "Sector Details", "data": SectorDetailsAll })
-    } else {
-        res.status(404).send({ "status": "Failed", "message": "No Data Found!" })
+    let total_pages = Math.ceil(total_records / per_page);
+    let meta = {
+        current_page: current_page,
+        per_page: per_page,
+        total_pages: total_pages,
+        total_records: total_records
     }
+
+    await Sectors.find(conditions).sort(order_by).limit(per_page).skip(offset).then(results => {
+        if (results.length > 0) {
+            let SectorDetailsAll = {
+                'results': results,
+                'meta': meta
+            }
+            res.status(200).send({ "status": "success", "message": "Sector Details", "data": SectorDetailsAll })
+        }
+        else {
+            res.status(404).send({ "status": "Failed", "message": "No Data Found!" })
+        }
+    })
+
+
+
+    // if (SectorDetailsAll.length > 0) {
+    //     res.status(200).send({ "status": "success", "message": "Sector Details", "data": SectorDetailsAll })
+    // } else {
+    //     res.status(404).send({ "status": "Failed", "message": "No Data Found!" })
+    // }
 }
 
 
@@ -98,7 +121,7 @@ const update = async (req, res) => {
             res.send({ "status": "Failed", "message": "Error: Sector id not found" })
         }
     } catch (error) {
-        return sendCustomError({error}, res, 500, 'Error in adding Data.')
+        return sendCustomError({ error }, res, 500, 'Error in adding Data.')
 
         // res.status(500).send({ "status": "Failed", "message": "Error in Updating Details" })
     }

@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Icon } from "@chakra-ui/react";
-import {MdHome,MdAreaChart,MdCategory,MdGrade,MdBook,MdSegment,MdQuestionAnswer,
+import {
+  MdHome, MdAreaChart, MdCategory, MdGrade, MdBook, MdSegment, MdQuestionAnswer,
 } from "react-icons/md";
 
 // Admin Imports
@@ -12,6 +13,7 @@ import ViewGrade from "views/admin/grades/view"
 import ViewSubjects from "views/admin/subject/view"
 import ViewSection from "views/admin/section/view"
 import ViewQuestion from "views/admin/question/view"
+import { ClassNames } from "@emotion/react";
 
 const routes = [
   {
@@ -22,49 +24,48 @@ const routes = [
     component: MainDashboard,
   },
   {
-    name: "Sectors",
+    name: "Sector",
     layout: "/admin",
     path: "/Sectors",
-    icon: (
-      <Icon as={MdAreaChart} width='20px' height='20px' color='inherit' />
-    ),
+    icon: <Icon as={MdAreaChart} width='20px' height='20px' color='inherit' />,
     component: Sectors,
   },
   {
-    name: "View Categories",
+    name: "Categories",
     layout: "/admin",
     path: "/ViewCategory",
     icon: <Icon as={MdCategory} width='20px' height='20px' color='inherit' />,
     component: ViewCategory,
   },
   {
-    name: "View Grades",
+    name: "Grades",
     layout: "/admin",
     path: "/ViewGrade",
     icon: <Icon as={MdGrade} width='20px' height='20px' color='inherit' />,
     component: ViewGrade,
   },
   {
-    name: "View Subjects",
+    name: "Subjects",
     layout: "/admin",
     path: "/ViewSubjects",
     icon: <Icon as={MdBook} width='20px' height='20px' color='inherit' />,
     component: ViewSubjects,
   },
   {
-    name: "View Section",
+    name: "Section",
     layout: "/admin",
     path: "/ViewSection",
     icon: <Icon as={MdSegment} width='20px' height='20px' color='inherit' />,
     component: ViewSection,
   },
   {
-    name: "View Question",
+    name: "Question",
     layout: "/admin",
     path: "/ViewQuestion",
     icon: <Icon as={MdQuestionAnswer} width='20px' height='20px' color='inherit' />,
     component: ViewQuestion,
   },
 ];
+
 
 export default routes;

@@ -12,7 +12,6 @@ import {
   SimpleGrid,
   Box
 } from "@chakra-ui/react";
-import Upload from "./Upload";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { setQuestion } from "../../../../services/question";
@@ -22,10 +21,13 @@ import { getGrade } from "../../../../services/grade"
 import { getCategory } from "../../../../services/category"
 import { getSubject } from "../../../../services/subject"
 import { getSection } from "../../../../services/section"
+import '../../../../assets/css/CustomCssForDropDown.css'
+import { useHistory } from "react-router-dom";
 
 
 
 export default function QuestionForm(props) {
+  const history = useHistory();
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
@@ -48,11 +50,11 @@ export default function QuestionForm(props) {
       const SectionData = await getSection()
       const SubjectData = await getSubject()
 
-      setSectorId(SectorData?.data?.data)
-      setCategoryId(CategoryData?.data?.CategoryDetailsAll)
-      setGradeId(GradeData?.data?.gradeDetailsAll)
-      setSubjectId(SubjectData?.data?.subjectsDetailsAll)
-      setSectionId(SectionData?.data?.sectionsDetailsAll)
+      setSectorId(SectorData?.data?.results)
+      setCategoryId(CategoryData?.data?.data?.results)
+      setGradeId(GradeData?.data?.data?.results)
+      setSubjectId(SubjectData?.data?.data?.results)
+      setSectionId(SectionData?.data?.data?.results)
     } catch (error) {
 
     }
@@ -60,15 +62,17 @@ export default function QuestionForm(props) {
 
 
   const QuestionAttribute = async (values) => {
-    console.log("vvv",values)
     try {
       await setQuestion(values)
         .then(async (response) => {
-          let data = response.data.result.data;
+          let data = response.data.Data;
           if (data) {
-            window.location = "/dashboard";
+            Swal.fire({
+              icon: "success",
+              title: "Submitted Successfully"
+            });  
+            history.push('/admin/ViewQuestion')
           }
-          // actions.resetForm();
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
@@ -97,11 +101,11 @@ export default function QuestionForm(props) {
         isCorrect: "",
         statusBtn: "",
         difficulty: "",
-        sector_id:"",
-        category_id:"",
-        grade_id:"",
-        subject_id:"",
-        section_id:"",
+        sector_id: "",
+        category_id: "",
+        grade_id: "",
+        subject_id: "",
+        section_id: "",
 
 
 
@@ -118,31 +122,31 @@ export default function QuestionForm(props) {
   return (
     <>
       <FormControl>
-      <SimpleGrid>
-          <select name="sector_id" onChange={handleChange} onBlur={handleBlur}>
+        <SimpleGrid>
+          <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
             <option>Choose Sector Title</option>
-            {sectorId.map((item, i) => (<>{item.status == "ACTIVE" ?<option value={item._id}>{item.title}</option> : ""}</>))
-          }</select>
+            {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
+            }</select>
 
-          <select name="category_id" onChange={handleChange} onBlur={handleBlur}>
-          <option>Choose Category Title</option>
-            {categoryId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
-          }</select>
+          <select className="dropDown" name="category_id" onChange={handleChange} onBlur={handleBlur}>
+            <option>Choose Category Title</option>
+            {categoryId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
+            }</select>
 
-          <select name="grade_id" onChange={handleChange} onBlur={handleBlur}>
-          <option>Choose Grade Title</option>
-            {gradeId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.name}</option> : ""}</>))
-          }</select>
+          <select className="dropDown" name="grade_id" onChange={handleChange} onBlur={handleBlur}>
+            <option>Choose Grade Title</option>
+            {gradeId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.name}</option> : ""}</>))
+            }</select>
 
-          <select name="subject_id" onChange={handleChange} onBlur={handleBlur}>
-          <option>Choose Subject Title</option>
-            {subjectId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
-          }</select>
+          <select className="dropDown" name="subject_id" onChange={handleChange} onBlur={handleBlur}>
+            <option>Choose Subject Title</option>
+            {subjectId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
+            }</select>
 
-          <select name="section_id" onChange={handleChange} onBlur={handleBlur}>
-          <option>Choose Section Title</option>
-          {sectionId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
-          }</select>
+          <select className="dropDown" name="section_id" onChange={handleChange} onBlur={handleBlur}>
+            <option>Choose Section Title</option>
+            {sectionId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
+            }</select>
 
         </SimpleGrid>
         <Box bg="" height="80px">
@@ -274,12 +278,12 @@ export default function QuestionForm(props) {
                 name="isCorrect"
                 value={"TRUE"}
                 onChange={handleChange}
-                onBlur={handleBlur}>TRUE</Radio>
+                onBlur={handleBlur}>True</Radio>
               <Radio
                 name="isCorrect"
                 value={"FALSE"}
                 onChange={handleChange}
-                onBlur={handleBlur}>FALSE</Radio>
+                onBlur={handleBlur}>False</Radio>
             </HStack>
           </RadioGroup>
         </Box>
@@ -300,12 +304,12 @@ export default function QuestionForm(props) {
               name="statusBtn"
               value={"ACTIVE"}
               onChange={handleChange}
-              onBlur={handleBlur}>ACTIVE</Radio>
+              onBlur={handleBlur}>Active</Radio>
             <Radio
               name="statusBtn"
               value={"INACTIVE"}
               onChange={handleChange}
-              onBlur={handleBlur}>INACTIVE</Radio>
+              onBlur={handleBlur}>Inactive</Radio>
           </HStack>
         </RadioGroup>
         <FormLabel
@@ -324,17 +328,17 @@ export default function QuestionForm(props) {
               name="difficulty"
               value={"Beginner"}
               onChange={handleChange}
-              onBlur={handleBlur}>BEGINNER</Radio>
+              onBlur={handleBlur}>Beginner</Radio>
             <Radio
               name="difficulty"
               value={"Intermediate"}
               onChange={handleChange}
-              onBlur={handleBlur}>INTERMEDIATE</Radio>
+              onBlur={handleBlur}>Intermediate</Radio>
             <Radio
               name="difficulty"
               value={"Advanced"}
               onChange={handleChange}
-              onBlur={handleBlur}>ADVANCED</Radio>
+              onBlur={handleBlur}>Advanced</Radio>
           </HStack>
         </RadioGroup>
       </FormControl>

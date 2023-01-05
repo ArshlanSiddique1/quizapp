@@ -18,14 +18,13 @@ export default function SectionFormUpdate(props) {
       editSection(values)
         .then(async (response) => {
           let data = await response;
-          console.log("ccccccccccdata",data)
           if (data) {
             Swal.fire({
               icon: 'success',
               title: 'Updated',
               text: `${response?.message}`
             })
-
+          props.submit()
           }
         })
         .catch((err) => {
@@ -60,7 +59,9 @@ export default function SectionFormUpdate(props) {
   });
 
 
-
+  const cancel = () => {
+    props?.close()
+  }
 
 
 

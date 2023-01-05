@@ -68,16 +68,34 @@ const view = async (req, res) => {
     }
 
     // for pagination
-    const per_page = parseInt((req.query.per_page) ? req.query.per_page : 5);
+    const per_page = parseInt((req.query.per_page) ? req.query.per_page : 8);
     const offset = parseInt((current_page - 1) * per_page);
 
-    try {
-        const questionsDetailsAll = await Questions.find(conditions).sort(order_by).limit(per_page).skip(offset);
-        res.status(200).send({ "status": "success", "message": "Question Details", questionsDetailsAll })
-    } catch (error) {
-        res.status(400).send({ "status": "Failed", "message": "Error in Fetching Details", error })
+
+
+    let total_records = await Questions.count(conditions);
+
+    let total_pages = Math.ceil(total_records / per_page);
+    let meta = {
+        current_page: current_page,
+        per_page: per_page,
+        total_pages: total_pages,
+        total_records: total_records
     }
 
+        const questionsDetailsAll = await Questions.find(conditions).sort(order_by).limit(per_page).skip(offset).then(results => {
+            if (results.length > 0) {
+                let questionsDetailsAll = {
+                    'results': results,
+                    'meta': meta
+                }
+                res.status(200).send({ "status": "success", "message": "Questions Details", "data": questionsDetailsAll })
+            }
+            else {
+                res.status(404).send({ "status": "Failed", "message": "No Data Found!" })
+            }
+        })
+    
 }
 
 // Read indivisually Questions

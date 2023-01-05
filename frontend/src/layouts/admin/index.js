@@ -21,14 +21,12 @@ import Sections from "views/admin/section/add"
 import ViewSection from "views/admin/section/view"
 import Questions from "views/admin/question/add"
 import ViewQuestion from "views/admin/question/view"
-
+import CategoryFormUpdate from "../../views/admin/Categories/view/Edit/CategoryFormUpdate"
 
 
 
 // Custom Chakra theme
 export default function Dashboard(props) {
-
-
   const history = useHistory();
   useEffect(() => {
     const userInfo = localStorage.getItem("UsersData");
@@ -38,15 +36,46 @@ export default function Dashboard(props) {
     if (!userInfo) {
       history.replace("/singIn");
     }
-  },[]);
+  }, []);
 
   const { ...rest } = props;
   // states and functions
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
 
+
+  const getActiveRoute = (routes) => {
+    let activeRoute = props.location.pathname;
+
+    console.log(activeRoute)
+    for (let i = 0; i < routes.length; i++) {
+      if (routes[i].collapse) {
+        let collapseActiveRoute = getActiveRoute(routes[i].items);
+        if (collapseActiveRoute !== activeRoute) {
+          return collapseActiveRoute;
+        }
+
+      } else if (routes[i].category) {
+        let categoryActiveRoute = getActiveRoute(routes[i].items);
+        if (categoryActiveRoute !== activeRoute) {
+          return categoryActiveRoute;
+        }
+
+      } else {
+        if (
+          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+        ) {
+          return routes[i].name;
+        }
+      }
+    }
+    return activeRoute;
+  };
+
   return (
+
     <Box>
+
       <SidebarContext.Provider
         value={{
           toggleSidebar,
@@ -71,7 +100,7 @@ export default function Dashboard(props) {
               <Navbar
                 // onOpen={onOpen}
                 logoText={"Horizon UI Dashboard PRO"}
-                // brandText={getActiveRoute(routes)}
+                brandText={getActiveRoute(routes)}
                 // secondary={getActiveNavbar(routes)}
                 // message={getActiveNavbarText(routes)}
                 fixed={fixed}
@@ -138,7 +167,11 @@ export default function Dashboard(props) {
                                         ?
                                         <ViewQuestion /> :
 
-                                        <MainDashboard />
+                                        props.location.pathname === "/admin/EditCategory"
+                                          ?
+                                            <CategoryFormUpdate /> :
+
+                                          <MainDashboard />
             }
           </Box>
           <Box>

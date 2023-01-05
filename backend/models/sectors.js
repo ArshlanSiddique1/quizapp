@@ -2,9 +2,16 @@ const mongoose = require('mongoose');
 const validate = require('mongoose-validator');
 const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
-const { sendCustomError } = require('../helper/response');
 const bcrypt = require('bcryptjs');
-
+slug = require('mongoose-slug-updater'),
+    mongoose.plugin(slug);
+    const nameValidator = [
+        validate({
+            validator: 'isLength',
+            arguments: [0, 40],
+            message: 'Name must not exceed {ARGS[1]} characters.'
+        })
+    ];
 
 
 const UserSchema = new mongoose.Schema({

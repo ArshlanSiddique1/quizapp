@@ -3,9 +3,7 @@ import axios from 'axios';
 import { getToken } from './user';
 
 export async function setCategory(datas) {
-    // let tokenId = await getToken();
-    console.log("tokenId", datas)
-    
+    // let tokenId = await getToken();    
     let data = JSON.stringify({
         "sector_id":datas.sector_id,
         "title": datas.title,
@@ -33,10 +31,10 @@ export async function setCategory(datas) {
 
 
 
-export async function getCategory(data) {
+export async function getCategory(page,perPage,order) {
     let config = {
         method: 'get',
-        url: `${API_URL}/categories`,
+        url: `${API_URL}/categories/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -58,7 +56,6 @@ export async function getCategoryById(id) {
     };
     const request = axios(config);
     const dataPromise = request.then((response) => response);
-    console.log("dataPromise", dataPromise)
     return dataPromise;
 }
 
@@ -68,6 +65,7 @@ export async function getCategoryById(id) {
 
 // Edit in category
 export async function editCategory(value) {
+    console.log("value in ctae",value)
     let tokenId = await getToken();
     let datas = JSON.stringify({
         "title": value.title,

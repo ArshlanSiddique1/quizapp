@@ -31,18 +31,38 @@ export async function setSector(datas) {
     return dataPromise;
 }
 
-export async function getSector(data) {
+
+
+
+
+export async function getSector(page, perPage, order = "") {
     let config = {
         method: 'get',
-        url: `${API_URL}/sectors`,
+        url: `${API_URL}/sectors/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },
     };
     const request = axios(config);
-    const dataPromise = request.then((response) => response);
+    const dataPromise = request.then((response) => response?.data);
     return dataPromise;
 }
+
+// export async function getSector() {
+//     let config = {
+//         method: 'get',
+//         url: `${API_URL}/sectors`,
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//     };
+//     const request = axios(config);
+//     const dataPromise = request.then((response) => response?.data);
+//     return dataPromise;
+// }
+
+
+
 
 export async function getSectorById(id) {
     let config = {
@@ -56,6 +76,10 @@ export async function getSectorById(id) {
     const dataPromise = request.then((response) => response);
     return dataPromise;
 }
+
+
+
+
 
 
 export async function delSector(id) {
@@ -73,6 +97,13 @@ export async function delSector(id) {
     return dataPromise;
 }
 
+
+
+
+
+
+
+
 export async function EditSector(value) {
     let tokenId = await getToken();
     let datas = JSON.stringify({
@@ -81,7 +112,7 @@ export async function EditSector(value) {
         "metaTitle": value.metaTitle,
         "metaDescription": value.metaDescription,
         "status": value.statusBtn,
-        "id":value.id
+        "id": value.id
     });
     let config = {
         method: 'put',

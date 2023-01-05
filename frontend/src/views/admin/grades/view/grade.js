@@ -28,7 +28,7 @@ import { NavLink } from "react-router-dom";
 
 
 export default function DevelopmentTable(props) {
-  const { columnsData, tableData, OnClickDelete, OnClickEdit } = props;
+  const { columnsData, tableData, OnClickDelete, OnClickEdit,nextPage, previousPage, currentPage, totalPages } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -61,6 +61,7 @@ export default function DevelopmentTable(props) {
 
 
   return (
+    <>
     <Card
       direction='column'
       w='100%'
@@ -181,6 +182,42 @@ export default function DevelopmentTable(props) {
           })}
         </Tbody>
       </Table>
-    </Card>
+     </Card>
+         <div className="pagination-btn">
+         <Button
+           className="page-btn"
+           variant='no-hover'
+           bg='transparent'
+           p='0px'
+           minW='unset'
+           minH='unset'
+           h='18px'
+           w='max-content'
+           _focus={{ boxShadow: 'none' }}
+           onClick={() => previousPage()}>
+           PREV
+         </Button>
+         {
+           currentPage 
+         }
+         of
+         {
+           totalPages
+         }
+         <Button
+           variant='no-hover'
+           bg='transparent'
+           p='0px'
+           minW='unset'
+           minH='unset'
+           h='18px'
+           w='max-content'
+           _focus={{ boxShadow: 'none' }}
+           className="page-btn"
+           onClick={() => nextPage()}>
+           NEXT
+         </Button>
+       </div>
+     </>
   );
 }

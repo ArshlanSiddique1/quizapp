@@ -1,15 +1,15 @@
 /* eslint-disable */
-import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, Button, Divider, SimpleGrid } from "@chakra-ui/react";
-import "../../../../../assets/css/MyCustom.css"
-
+import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, Button, } from "@chakra-ui/react";
 // Custom components
 import Card from "components/card/Card";
 import React, { useMemo } from "react";
-import {useGlobalFilter, usePagination, useSortBy, useTable,} from "react-table";
+import { useGlobalFilter, usePagination, useSortBy, useTable, } from "react-table";
 import { NavLink } from "react-router-dom";
 
+
+
 export default function DevelopmentTable(props) {
-  const { columnsData, tableData, OnClickDelete, OnClickEdit, nextPage, previousPage, currentPage, totalPages } = props;
+  const { columnsData, tableData, OnClickDelete, OnClickEdit, } = props;
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
   const tableInstance = useTable(
@@ -21,7 +21,6 @@ export default function DevelopmentTable(props) {
     useSortBy,
     usePagination
   );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -30,8 +29,7 @@ export default function DevelopmentTable(props) {
     prepareRow,
     initialState,
   } = tableInstance;
-  initialState.pageSize = 11;
-
+  initialState.pageSize = 1;
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const iconColor = useColorModeValue("secondaryGray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -153,7 +151,7 @@ export default function DevelopmentTable(props) {
                       );
                     }
                     return (
-
+                      
                       <Td
                         {...cell.getCellProps()}
                         key={index}
@@ -169,44 +167,7 @@ export default function DevelopmentTable(props) {
             })}
           </Tbody>
         </Table>
-
       </Card>
-      <div className="pagination-btn">
-        <Button
-          className="page-btn"
-          variant='no-hover'
-          bg='transparent'
-          p='0px'
-          minW='unset'
-          minH='unset'
-          h='18px'
-          w='max-content'
-          _focus={{ boxShadow: 'none' }}
-          onClick={() => previousPage()}>
-          PREV
-        </Button>
-        {
-          currentPage 
-        }
-        of
-        {
-          totalPages
-        }
-        <Button
-          variant='no-hover'
-          bg='transparent'
-          p='0px'
-          minW='unset'
-          minH='unset'
-          h='18px'
-          w='max-content'
-          _focus={{ boxShadow: 'none' }}
-          className="page-btn"
-          onClick={() => nextPage()}>
-          NEXT
-        </Button>
-      </div>
-
     </>
   );
 }

@@ -24,7 +24,7 @@ export default function SubjectFormUpdate(props) {
               title: 'Updated',
               text: `${response?.message}`
             })
-
+             props?.submit()
           }
         })
         .catch((err) => {
@@ -60,7 +60,9 @@ export default function SubjectFormUpdate(props) {
   });
 
 
-
+  const cancel = () => {
+    props?.close()
+  }
 
 
 

@@ -20,6 +20,8 @@ import { useState, useEffect } from "react";
 import { getSector } from "../../../../services/sector";
 import { getGrade } from "../../../../services/grade"
 import { getCategory } from "../../../../services/category"
+import '../../../../assets/css/CustomCssForDropDown.css'
+
 
 
 export default function SubjectForm(props) {
@@ -41,9 +43,9 @@ export default function SubjectForm(props) {
       const CategoryData = await getCategory()
       const GradeData = await getGrade()
 
-      setSectorId(SectorData?.data?.data)
-      setCategoryId(CategoryData?.data?.CategoryDetailsAll)
-      setGradeId(GradeData?.data?.gradeDetailsAll)
+      setSectorId(SectorData?.data?.results)
+      setCategoryId(CategoryData?.data?.data?.results)
+      setGradeId(GradeData?.data?.data?.results)
     } catch (error) {
 
     }
@@ -103,19 +105,19 @@ export default function SubjectForm(props) {
   return (
     <>
     <SimpleGrid>
-          <select name="sector_id" onChange={handleChange} onBlur={handleBlur}>
+          <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
             <option>Choose Sector Title</option>
-            {sectorId.map((item, i) => (<>{item.status == "ACTIVE" ?<option value={item._id}>{item.title}</option> : ""}</>))
+            {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ?<option value={item._id}>{item.title}</option> : ""}</>))
           }</select>
 
-          <select name="category_id" onChange={handleChange} onBlur={handleBlur}>
+          <select name="category_id" className="dropDown" onChange={handleChange} onBlur={handleBlur}>
           <option>Choose Category Title</option>
-            {categoryId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
+            {categoryId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))
           }</select>
 
-          <select name="grade_id" onChange={handleChange} onBlur={handleBlur}>
+          <select name="grade_id" className="dropDown" onChange={handleChange} onBlur={handleBlur}>
           <option>Choose Grade Title</option>
-            {gradeId.map((item, i) => (<>{item.status == "ACTIVE" ? <option value={item._id}>{item.name}</option> : ""}</>))
+            {gradeId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.name}</option> : ""}</>))
           }</select>
 
 

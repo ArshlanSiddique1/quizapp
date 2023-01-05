@@ -5,7 +5,6 @@ import { getToken } from './user';
 
 export async function setQuestion(datas) {
     let tokenId = await getToken();
-    console.log("tokenId", tokenId)
     let data = JSON.stringify({
         "title": datas.title,
         "explanation": datas.explanation,
@@ -36,10 +35,10 @@ export async function setQuestion(datas) {
 
 
 
-export async function getQuestion(data) {
+export async function getQuestion(page,perPage,order) {
     let config = {
         method: 'get',
-        url: `${API_URL}/questions`,
+        url: `${API_URL}/questions/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },

@@ -24,7 +24,7 @@ export default function QuestionFormUpdate(props) {
               title: 'Updated',
               text: `${response?.message}`
             })
-
+            props?.submit();
           }
         })
         .catch((err) => {
@@ -55,10 +55,13 @@ export default function QuestionFormUpdate(props) {
     // validationSchema: signInSchema,
     onSubmit: (values, action) => {
       QuestionAttribute(values);
+
     },
   });
 
-
+  const cancel = () => {
+    props?.close()
+  }
 
 
 

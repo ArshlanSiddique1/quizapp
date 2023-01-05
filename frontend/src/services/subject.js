@@ -45,10 +45,10 @@ export async function setSubject(datas) {
 //     return dataPromise;
 // }
 
-export async function getSubject(data) {
+export async function getSubject(page,perPage,order) {
     let config = {
         method: 'get',
-        url: `${API_URL}/subjects`,
+        url: `${API_URL}/subjects/?current_page=${page}&${order}&per_page=${perPage}`,
         headers: {
             'Content-Type': 'application/json',
         },

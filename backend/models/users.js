@@ -5,6 +5,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
 const { sendCustomError } = require('../helper/response');
 const bcrypt = require('bcryptjs');
+
 const nameValidator = [
     validate({
         validator: 'isLength',

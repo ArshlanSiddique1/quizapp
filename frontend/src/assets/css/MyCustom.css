@@ -21,3 +21,14 @@ select.input-error {
 .css-7unfy3 {
     min-height: 59% !important;
 }
+
+.pagination-btn{
+    display: flex;
+    text-align: center;
+    margin: 5px auto;
+    position:sticky;
+    bottom: 0px;
+}
+.page-btn{
+    margin: 5px 25px;
+}

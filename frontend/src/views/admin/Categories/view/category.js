@@ -1,32 +1,15 @@
 /* eslint-disable */
 import {
-  Flex,
-  Progress,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-  Button, Icon
-} from "@chakra-ui/react";
+  Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, Button,} from "@chakra-ui/react";
 // Custom components
 import Card from "components/card/Card";
 import React, { useMemo } from "react";
-import { Link } from '@chakra-ui/react'
-import {
-  useGlobalFilter,
-  usePagination,
-  useSortBy,
-  useTable,
-} from "react-table";
+import {useGlobalFilter, usePagination, useSortBy, useTable,} from "react-table";
 import { NavLink } from "react-router-dom";
-
+import "../../../../assets/css/MyCustom.css"
 
 export default function DevelopmentTable(props) {
-  const { columnsData, tableData, OnClickDelete, OnClickEdit } = props;
+  const { columnsData, tableData, OnClickDelete, OnClickEdit, nextPage, previousPage, currentPage, totalPages } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -59,6 +42,7 @@ export default function DevelopmentTable(props) {
 
 
   return (
+    <>
     <Card
       direction='column'
       w='100%'
@@ -128,7 +112,7 @@ export default function DevelopmentTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  }else if (cell.column.Header === "META TITLE") {
+                  } else if (cell.column.Header === "META TITLE") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
@@ -152,7 +136,7 @@ export default function DevelopmentTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  }else if (cell.column.Header === "SUBSCRIPTION") {
+                  } else if (cell.column.Header === "SUBSCRIPTION") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
@@ -209,5 +193,41 @@ export default function DevelopmentTable(props) {
         </Tbody>
       </Table>
     </Card>
+    <div className="pagination-btn">
+        <Button
+          className="page-btn"
+          variant='no-hover'
+          bg='transparent'
+          p='0px'
+          minW='unset'
+          minH='unset'
+          h='18px'
+          w='max-content'
+          _focus={{ boxShadow: 'none' }}
+          onClick={() => previousPage()}>
+          PREV
+        </Button>
+        {
+          currentPage 
+        }
+        of
+        {
+          totalPages
+        }
+        <Button
+          variant='no-hover'
+          bg='transparent'
+          p='0px'
+          minW='unset'
+          minH='unset'
+          h='18px'
+          w='max-content'
+          _focus={{ boxShadow: 'none' }}
+          className="page-btn"
+          onClick={() => nextPage()}>
+          NEXT
+        </Button>
+      </div>
+    </>
   );
 }

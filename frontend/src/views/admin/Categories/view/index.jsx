@@ -1,13 +1,14 @@
 // Chakra imports
-import { Box, SimpleGrid
- } from "@chakra-ui/react";
+import {
+  Box, SimpleGrid
+} from "@chakra-ui/react";
 import DevelopmentTable from "./category"
 import Swal from "sweetalert2";
 import React from "react";
 import { useEffect, useState } from "react";
-import {cancel} from "./Edit/CategoryFormUpdate"
-import { getCategoryById,delCategory,getCategory } from "../../../../services/category";
+import { getCategoryById, delCategory, getCategory } from "../../../../services/category";
 import CategoryFormUpdate from "./Edit/CategoryFormUpdate";
+import { Route, useHistory } from "react-router-dom";
 export const columnsDataDevelopment = [
   {
     Header: "TITLE",
@@ -52,22 +53,74 @@ export const columnsDataDevelopment = [
 ];
 
 export default function Settings() {
+  const history = useHistory()
   useEffect(() => {
     category();
   }, []);
   const [tableDataDevelopment, setCategoryData] = useState([]);
-  const [datas, setDatas] = useState({});
+  const [datas, setDatas] = useState([]);
   const [edit, setEdit] = useState(false);
+  const [currentPage, setCurrentPage] = useState("");
+  const [totalRecords, setTotalRecords] = useState();
+  const [totalPages, setTotalPages] = useState();
+  const perPage = 8;
+  let sortOrder = "order_by=createdAt&order=-1";
+  let page = currentPage;
 
   // Show Sector Data
   const category = async (response) => {
-    const Mydata = await getCategory();
-    setCategoryData(Mydata?.data?.CategoryDetailsAll);
+    const Mydata = await getCategory(page,perPage,sortOrder);
+    setCategoryData(Mydata?.data?.data?.results);
+    setCurrentPage(Mydata?.data?.data?.meta?.current_page);
+    setTotalRecords(Mydata?.data?.data?.meta?.total_records);
+    setTotalPages(Mydata?.data?.data?.meta?.total_pages);
   }
+  
+
+
+  async function nextPage() {
+    if (currentPage < totalPages) {
+      page = (currentPage + 1);
+      await category();
+    }
+  }
+
+  async function numberPage(p) {
+    if (currentPage != p) {
+      if (currentPage <= totalPages) {
+        page = p;
+        await category();
+      }
+    }
+  }
+
+  async function previousPage() {
+    if ((currentPage <= totalPages) && (currentPage > 1)) {
+      page = (currentPage - 1);
+      await category();
+    }
+  }
+
+  {
+    (totalRecords > perPage) &&
+      <div className="pagination d-flex justify-content-center user-select-none">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className="page-item"><a className="page-link" role="button" onClick={previousPage} href={undefined}>Previous</a></li>
+            {
+              Array.from(Array(totalPages), (e, index) => {
+                return <li key={index} className={`page-item ${(currentPage == (index + 1)) ? "active" : ""}`}><a className="page-link" role="button" onClick={() => { numberPage(index + 1) }} href={undefined}>{index + 1}</a></li>
+              })
+            }
+            <li className="page-item"><a className="page-link" role="button" onClick={nextPage} href={undefined}>Next</a></li>
+          </ul>
+        </nav>
+      </div>
+  }
+
 
   // Delete By Id 
   const OnClickDelete = async (index) => {
-    console.log("Index_Id", index)
     try {
       await delCategory(index).then(async (response) => {
         console.log("Response ", response)
@@ -96,19 +149,15 @@ export default function Settings() {
   const OnClickEdit = async (index) => {
     const Data = await getCategoryById(index)
     setDatas(Data?.data.data)
+    // console.log()
     setEdit(true);
   }
-
-  
-  cancel();
-
   // Chakra Color Mode
   return (
     <>
       {edit ?
-        <CategoryFormUpdate data={datas} />    
-         :
-        <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+        <CategoryFormUpdate  data={datas} close={() => { setEdit(false) }} submit={()=>{setEdit(false)}}/>
+        : <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
           <SimpleGrid
             mb='20px'
             columns={{ sm: 1, md: 1 }}
@@ -118,9 +167,14 @@ export default function Settings() {
               tableData={tableDataDevelopment}
               OnClickDelete={(val) => OnClickDelete(val)}
               OnClickEdit={(val) => OnClickEdit(val)}
+              nextPage={nextPage}
+              previousPage={previousPage}             
+              currentPage={currentPage}
+              totalPages={totalPages}
             />
           </SimpleGrid>
-        </Box>}
+        </Box>
+      }
     </>
   );
 }

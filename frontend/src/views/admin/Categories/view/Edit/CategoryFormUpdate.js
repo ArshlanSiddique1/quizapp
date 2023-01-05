@@ -5,14 +5,15 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { editCategory } from "../../../../../services/category";
 
-
 export default function CategoryFormUpdate(props) {
+  console.log("props",props)
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
 
   // Formik for form validation   
   const CategoryAttribute = (values) => {
+    console.log("dbjf",values)
     try {
       editCategory(values)
         .then(async (response) => {
@@ -23,11 +24,11 @@ export default function CategoryFormUpdate(props) {
               title: 'Updated',
               text: `${response?.message}`
             })
-            window.location = "/dashboard";
+            props?.submit()
           }
         })
         .catch((err) => {
-          if (err?.response?.data?.result?.code === 401) {
+          if (err) {
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -59,6 +60,10 @@ export default function CategoryFormUpdate(props) {
     },
   });
 
+
+  const cancel = () => {
+    props?.close()
+  }
 
 
 
@@ -326,14 +331,3 @@ export default function CategoryFormUpdate(props) {
     </>
   );
 }
-
-export const cancel = () => {
-  let edit = 'False';
-  return (
-
-    { edit }
-
-  )
-
-}
-

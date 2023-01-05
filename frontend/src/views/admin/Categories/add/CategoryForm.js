@@ -8,9 +8,11 @@ import { setCategory } from "../../../../services/category";
 import { useState,useEffect } from "react";
 import { getSector } from "../../../../services/sector";
 import '../../../../assets/css/CustomCssForDropDown.css'
+import { useHistory } from "react-router-dom";
 
 
 export default function CategoryForm(props) {
+  const history = useHistory();
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
@@ -24,7 +26,7 @@ export default function CategoryForm(props) {
   const getIds = async () => {
     try {
       const SectorData = await getSector()
-      setSectorId(SectorData?.data?.data)
+      setSectorId(SectorData?.data?.results)
     } catch (error) {
 
     }
@@ -35,11 +37,14 @@ export default function CategoryForm(props) {
     try {
       await setCategory(values)
         .then(async (response) => {
-          let data = response.data.result.data;
-          if (data) {
-            window.location = "/dashboard";
+          let data = response.data.Data;
+          if (data) {  
+            Swal.fire({
+              icon: "success",
+              title: "Submitted Successfully"
+            });  
+            history.push('/admin/ViewCategory')
           }
-          // actions.resetForm();
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
@@ -79,8 +84,7 @@ export default function CategoryForm(props) {
     <>
       <FormControl>
         <SimpleGrid>
-          
-        <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
+          <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
           <option selected disabled>Choose Sector Title</option>
           {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))}
         </select>
@@ -198,7 +202,7 @@ export default function CategoryForm(props) {
           type="text"
           rows="4" cols="137"
           name="description"
-          placeholder="Tell Something about youself in 150 Character!"
+          placeholder="Write "
           value={values.description}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -217,7 +221,7 @@ export default function CategoryForm(props) {
           type="text"
           rows="4" cols="137"
           name="metaDescription"
-          placeholder="Tell Something about youself in 150 Character!"
+          placeholder="Write "
           value={values.metaDescription}
           onChange={handleChange}
           onBlur={handleBlur}

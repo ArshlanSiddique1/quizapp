@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
-slug = require('mongoose-slug-updater'),
-mongoose.plugin(slug);
 const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
+slug = require('mongoose-slug-updater'),
+    mongoose.plugin(slug);
 
 const subjectSchema = new mongoose.Schema({
     sector_id: {
         type: String,
-        required: false
+        required: true
     },
     category_id: {
         type: String,
-        required: false
+        required: true
     },
     grade_id: {
         type: String,
-        required: false
+        required: true
     },
     title: {
         type: String,

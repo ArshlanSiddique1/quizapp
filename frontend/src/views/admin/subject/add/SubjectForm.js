@@ -21,6 +21,7 @@ import { getSector } from "../../../../services/sector";
 import { getGrade } from "../../../../services/grade"
 import { getCategory } from "../../../../services/category"
 import '../../../../assets/css/CustomCssForDropDown.css'
+import { subjectInSchema } from "validationSchema";
 
 
 
@@ -80,7 +81,7 @@ export default function SubjectForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
 
     useFormik({
       initialValues: {
@@ -94,7 +95,7 @@ export default function SubjectForm(props) {
         subscription: ""
 
       },
-      // validationSchema: signInSchema,
+      validationSchema: subjectInSchema,
       onSubmit: (values, action) => {
         SubjectAttribute(values);
       },
@@ -151,7 +152,11 @@ export default function SubjectForm(props) {
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
-            />
+              className={errors.title && touched.title ? "input-error" : ""}
+              />
+              {errors.title && touched.title && (
+                <p className="error-msg-text">{errors.title}</p>
+              )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel

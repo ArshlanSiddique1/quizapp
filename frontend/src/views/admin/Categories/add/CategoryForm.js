@@ -9,6 +9,7 @@ import { useState,useEffect } from "react";
 import { getSector } from "../../../../services/sector";
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
+import { categoryInSchema } from "validationSchema";
 
 
 export default function CategoryForm(props) {
@@ -60,7 +61,7 @@ export default function CategoryForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const { values, handleBlur, handleChange, handleSubmit , touched ,errors} =
 
     useFormik({
       initialValues: {
@@ -75,7 +76,7 @@ export default function CategoryForm(props) {
         subscription: ""
 
       },
-      // validationSchema: signInSchema,
+      validationSchema: categoryInSchema,
       onSubmit: (values, action) => {
         CategoryAttribute(values);
       },
@@ -115,8 +116,11 @@ export default function CategoryForm(props) {
               name="title"
               value={values.title}
               onChange={handleChange}
-              onBlur={handleBlur}
-            />
+              onBlur={handleBlur}className={errors.title && touched.title ? "input-error" : ""}
+              />
+              {errors.title && touched.title && (
+                <p className="error-msg-text">{errors.title}</p>
+              )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel

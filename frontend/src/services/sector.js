@@ -3,13 +3,12 @@ import axios from 'axios';
 import { getToken } from './user';
 
 
-
-
-
-export async function setSector(datas) {
+export async function setSector(datas, image) {
+    console.log(datas)
     let tokenId = await getToken();
     let data = JSON.stringify({
         "title": datas.title,
+        "image": image,
         "shortDescription": datas.shortDescription,
         "description": datas.description,
         "metaTitle": datas.metaTitle,

@@ -23,6 +23,7 @@ import { getSubject } from "../../../../services/subject"
 import { getSection } from "../../../../services/section"
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
+import { questionInSchema } from "validationSchema";
 
 
 
@@ -90,7 +91,7 @@ export default function QuestionForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
 
     useFormik({
       initialValues: {
@@ -111,7 +112,7 @@ export default function QuestionForm(props) {
 
 
       },
-      // validationSchema: signInSchema,
+      validationSchema: questionInSchema,
       onSubmit: (values, action) => {
         QuestionAttribute(values);
       },
@@ -174,7 +175,11 @@ export default function QuestionForm(props) {
             value={values.title}
             onChange={handleChange}
             onBlur={handleBlur}
-          />
+            className={errors.title && touched.title ? "input-error" : ""}
+            />
+            {errors.title && touched.title && (
+              <p className="error-msg-text">{errors.title}</p>
+            )}
         </Box>
 
         <Box bg="" height="80px">

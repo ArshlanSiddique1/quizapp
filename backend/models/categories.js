@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
 slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
+    mongoose.plugin(slug);;
 
 const categorySchema = new mongoose.Schema({
     sector_id: {
@@ -19,6 +19,8 @@ const categorySchema = new mongoose.Schema({
     slug: {
         type: String,
         slug: "title",
+        unique: true
+
     },
     description: {
         type: String,
@@ -42,12 +44,12 @@ const categorySchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        // enum: ['ACTIVE', 'INACTIVE'],
+        enum: ['ACTIVE', 'INACTIVE'],
         default: 'ACTIVE'
     },
     featured: {
         type: String,
-        // enum: ['TRUE', 'FALSE'],
+        enum: ['TRUE', 'FALSE'],
         default: 'TRUE'
     },
     subscription: {

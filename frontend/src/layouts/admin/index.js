@@ -45,7 +45,7 @@ export default function Dashboard(props) {
 
 
   const getActiveRoute = (routes) => {
-    let activeRoute = props.location.pathname;
+    let activeRoute = props.location.name;
 
     console.log(activeRoute)
     for (let i = 0; i < routes.length; i++) {

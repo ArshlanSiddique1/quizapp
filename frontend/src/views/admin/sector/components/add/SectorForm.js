@@ -17,33 +17,38 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { setSector } from "../../../../../services/sector";
 import { useHistory } from "react-router-dom";
+import { sectorInSchema } from "validationSchema";
+import { useState } from "react";
+import { multerFileUploader } from "function/multer";
 
 
 export default function SectorForm(props) {
   const history = useHistory();
-  // Chakra Color Mode
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
 
+  // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
 
-  
-  const SectorAttribute = async (values) => {
+
+  // Formik for form validation
+  const SectorAttribute = async (values, tempPicPath) => {
     try {
-      await setSector(values)
+      await setSector(values, tempPicPath)
         .then(async (response) => {
           let data = response.data.result.data;
           if (data) {
             Swal.fire({
               icon: "success",
               title: "Submitted Successfully"
-            });  
+            });
             history.push('/admin/Sectors')
           }
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
-    
+
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -57,23 +62,49 @@ export default function SectorForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
+  const { values, handleBlur, handleChange, handleSubmit, touched, errors } =
 
     useFormik({
       initialValues: {
         title: "",
         shortDescription: "",
-        description:"",
+        description: "",
         metaTitle: "",
         metaDescription: "",
         statusBtn: "",
       },
-      // validationSchema: signInSchema,
+      validationSchema: sectorInSchema,
+
+
       onSubmit: (values, action) => {
-        SectorAttribute(values);
+
+        SectorAttribute(values, tempPicPath);
+
+        console.log(values, "dkd", { tempPicPath })
       },
     });
-  
+
 
 
   return (
@@ -106,7 +137,11 @@ export default function SectorForm(props) {
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
+              className={errors.title && touched.title ? "input-error" : ""}
             />
+            {errors.title && touched.title && (
+              <p className="error-msg-text">{errors.title}</p>
+            )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel
@@ -129,7 +164,7 @@ export default function SectorForm(props) {
               pb={{ base: "100px", lg: "20px" }}
             />
           </Box>
-
+          <input type="file" name="image" onChange={uploadImage} />
           <Box bg="" height="80px">
             <FormLabel
               display="flex"
@@ -155,29 +190,29 @@ export default function SectorForm(props) {
 
 
         </SimpleGrid>
-        
+
         <Box bg="" height="80px">
-            <FormLabel
-              display="flex"
-              ms="4px"
-              fontSize="sm"
-              fontWeight="500"
-              color={textColor}
-              mb="8px"
-              for="Short-Description"
-            >
-              Description<Text color={brandStars}>*</Text>
-            </FormLabel>
-            <textarea className="text-field-forms"
-              type="text"
-              rows="1" cols="137"
-              name="description"
-              placeholder="Tell Something about youself in 150 Character!"
-              value={values.description}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </Box>
+          <FormLabel
+            display="flex"
+            ms="4px"
+            fontSize="sm"
+            fontWeight="500"
+            color={textColor}
+            mb="8px"
+            for="Short-Description"
+          >
+            Description<Text color={brandStars}>*</Text>
+          </FormLabel>
+          <textarea className="text-field-forms"
+            type="text"
+            rows="1" cols="137"
+            name="description"
+            placeholder="Tell Something about youself in 150 Character!"
+            value={values.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        </Box>
         <FormLabel
           display="flex"
           ms="4px"
@@ -251,7 +286,7 @@ export default function SectorForm(props) {
       </FormControl>
       <Button
         mt={4}
-        
+
         colorScheme="brand"
         isLoading={props.isSubmitting}
         type="submit"

@@ -58,4 +58,4 @@ const sectionSchema = new mongoose.Schema({
         default: 'ACTIVE'
     }
 }, { timestamps: true });
-module.exports = {Sections: db.model('section', sectionSchema), ObjectId };
+module.exports = { Sections: db.model('section', sectionSchema), ObjectId };

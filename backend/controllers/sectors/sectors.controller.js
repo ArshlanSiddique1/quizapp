@@ -3,8 +3,8 @@ const { Sectors } = require("../../models/sectors");
 
 
 const create = async (req, res) => {
-    let { title, slug, shortDescription, description, metaTitle, metaDescription, status } = req.body;
-    let requestData = { title, slug, shortDescription, description, metaTitle, metaDescription, status };
+    let { title, image, slug, shortDescription, description, metaTitle, metaDescription, status } = req.body;
+    let requestData = { title, image, slug, shortDescription, description, metaTitle, metaDescription, status };
     let newSectors = new Sectors(requestData);
 
     newSectors.save(async (err, data) => {

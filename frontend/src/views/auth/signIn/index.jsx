@@ -62,7 +62,6 @@ function SignIn() {
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
-            // console.log(err?.response?.data?.result?.message);
             Swal.fire({
               icon: "error",
               title: "Oops...",

@@ -1,24 +1,29 @@
 const mongoose = require('mongoose');
-slug = require('mongoose-slug-updater'),
-    mongoose.plugin(slug);
 const ObjectId = mongoose.Types.ObjectId;
 const db = require('../config/database').getUserDB();
+slug = require('mongoose-slug-updater'),
+    mongoose.plugin(slug);
 
 const questionSchema = new mongoose.Schema({
     sector_id: {
         type: String,
+        require:true
     },
     category_id: {
         type: String,
+        require:true
     },
     grade_id: {
         type: String,
+        require:true
     },
     subject_id: {
         type: String,
+        require:true
     },
     section_id: {
         type: String,
+        require:true
     },
     title: {
         type: String,

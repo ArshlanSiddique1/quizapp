@@ -23,6 +23,7 @@ import { getCategory } from "../../../../services/category"
 import { getSubject } from "../../../../services/subject"
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
+import { sectionInSchema } from "validationSchema";
 
 
 
@@ -89,7 +90,7 @@ export default function SectionForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const { values, handleBlur, handleChange, handleSubmit , touched ,errors} =
 
     useFormik({
       initialValues: {
@@ -105,7 +106,7 @@ export default function SectionForm(props) {
         grade_id: "",
         subject_id: ""
       },
-      // validationSchema: signInSchema,
+      validationSchema: sectionInSchema,
       onSubmit: (values, action) => {
         SectionAttribute(values);
       },
@@ -165,7 +166,11 @@ export default function SectionForm(props) {
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
-            />
+              className={errors.title && touched.title ? "input-error" : ""}
+              />
+              {errors.title && touched.title && (
+                <p className="error-msg-text">{errors.title}</p>
+              )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel

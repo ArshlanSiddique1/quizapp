@@ -7,11 +7,12 @@ import Swal from "sweetalert2";
 import { setGrade } from "../../../../services/grade";
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
+import { gradeInSchema } from "validationSchema";
 
 
 
 export default function GradeForm(props) {
-  const history=useHistory()
+  const history = useHistory()
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
@@ -28,7 +29,7 @@ export default function GradeForm(props) {
             Swal.fire({
               icon: "success",
               title: "Submitted Successfully"
-            });  
+            });
             history.push('/admin/ViewGrades')
           }
 
@@ -49,7 +50,7 @@ export default function GradeForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit } =
+  const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
 
     useFormik({
       initialValues: {
@@ -59,7 +60,7 @@ export default function GradeForm(props) {
         featured: "",
         optionss: "",
       },
-      // validationSchema: signInSchema,
+      validationSchema: gradeInSchema,
       onSubmit: (values, action) => {
         GradeAttribute(values);
       },
@@ -95,7 +96,11 @@ export default function GradeForm(props) {
               value={values.gradeName}
               onChange={handleChange}
               onBlur={handleBlur}
+              className={errors.gradeName && touched.gradeName ? "input-error" : ""}
             />
+            {errors.gradeName && touched.gradeName && (
+              <p className="error-msg-text">{errors.gradeName}</p>
+            )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel

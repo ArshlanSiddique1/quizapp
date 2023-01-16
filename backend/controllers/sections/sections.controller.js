@@ -9,7 +9,6 @@ const { sendSuccess, sendCustomError } = require("../../helper/response");
 // Create Sections
 const register = async (req, res) => {
     try {
-        console.log("boddyy", req.body)
         const sectionsDetails = new Sections({
             sector_id: req.body.sector_id,
             category_id: req.body.category_id,
@@ -23,7 +22,6 @@ const register = async (req, res) => {
             metaDescription: req.body.metaDescription,
             status: req.body.status
         });
-        console.log("boddyy", req.body)
         const sectionsData = await sectionsDetails.save();
         res.status(200).send({ "status": "success", "mesage": "Section Inserted !", "Data": sectionsData })
     } catch (error) {

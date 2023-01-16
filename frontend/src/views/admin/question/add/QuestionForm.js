@@ -24,15 +24,21 @@ import { getSection } from "../../../../services/section"
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
 import { questionInSchema } from "validationSchema";
+import { multerFileUploader } from "function/multer";
+import "../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
 
 
 
 export default function QuestionForm(props) {
   const history = useHistory();
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
+  const brandColor = useColorModeValue("brand.500", "white");
+
 
   useEffect(() => {
     getIds();
@@ -62,9 +68,9 @@ export default function QuestionForm(props) {
   }
 
 
-  const QuestionAttribute = async (values) => {
+  const QuestionAttribute = async (values, tempPicPath) => {
     try {
-      await setQuestion(values)
+      await setQuestion(values, tempPicPath)
         .then(async (response) => {
           let data = response.data.Data;
           if (data) {
@@ -91,6 +97,27 @@ export default function QuestionForm(props) {
     }
   };
 
+    const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
   const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
 
     useFormik({
@@ -114,7 +141,7 @@ export default function QuestionForm(props) {
       },
       validationSchema: questionInSchema,
       onSubmit: (values, action) => {
-        QuestionAttribute(values);
+        QuestionAttribute(values, tempPicPath);
       },
     });
 

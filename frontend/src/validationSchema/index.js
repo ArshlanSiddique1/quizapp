@@ -17,7 +17,7 @@ export const categoryInSchema = Yup.object().shape({
 });
 
 export const gradeInSchema = Yup.object().shape({
-    title: Yup.string().required("Required"),
+    gradeName: Yup.string().required("Required"),
 });
 
 export const sectionInSchema = Yup.object().shape({
@@ -26,7 +26,7 @@ export const sectionInSchema = Yup.object().shape({
     category_id: Yup.string().required("Required"),
     grade_id: Yup.string().required("Required"),
     subject_id: Yup.string().required("Required"),
-    
+
 });
 
 

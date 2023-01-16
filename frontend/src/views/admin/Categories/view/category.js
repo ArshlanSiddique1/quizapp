@@ -59,7 +59,7 @@ export default function DevelopmentTable(props) {
         <NavLink to="/admin/Categories"><Button>ADD NEW CATEGORY</Button></NavLink>
 
       </Flex>
-      <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
+      <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>    
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>

@@ -61,13 +61,13 @@ export default function Settings() {
 
   // Show Sector Data
   const subject = async (response) => {
-    const Mydata = await getSubject(page,perPage,sortOrder);
-    setSubjectData(Mydata?.data?.data?.results); 
+    const Mydata = await getSubject(page, perPage, sortOrder);
+    setSubjectData(Mydata?.data?.data?.results);
     setCurrentPage(Mydata?.data?.data?.meta?.current_page);
     setTotalRecords(Mydata?.data?.data?.meta?.total_records);
     setTotalPages(Mydata?.data?.data?.meta?.total_pages);
   }
-  
+
 
 
   async function nextPage() {
@@ -111,47 +111,46 @@ export default function Settings() {
   }
 
   // Delete By Id 
+  // Delete By Id 
   const OnClickDelete = async (index) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "But you will not be able to retrieve this file.",
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-      }
-    })
-    try {
-      await delSubject(index).then(async (response) => {
-        console.log("Response ", response)
-        if (response.status === "success") {
-          Swal.fire({
-            showCancelButton: true,
-            icon: 'success',
-            title: 'Deleted!',
-            text: `${response?.message}`
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+      allowOutsideClick: false
+    }).then(async (results) => {
+      try {
+        if (results.isConfirmed) {
+          await delSubject(index).then(async (response) => {
+            if (response.status === "success") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: `${response?.message}`
+              })
+              subject()
+            }
+            else if (response.status !== "success") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `${response?.message}`
+              });
+            }
           })
-          subject()
         }
-        else if (response.status !== "success") {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `${response?.message}`
-          });
-        }
-      })
-    } catch (error) {
-      console.log(error)
+
+      } catch (error) {
+        console.log(error)
+      }
     }
+    )
   }
 
   // Edit The Sector Data By Id
@@ -169,7 +168,7 @@ export default function Settings() {
   return (
     <>
       {edit ?
-        <SubjectFormUpdate data={datas} close={() => { setEdit(false) }} submit={()=>{setEdit(false)}}/>
+        <SubjectFormUpdate data={datas} close={() => { setEdit(false) }} submit={() => { setEdit(false) }} />
         :
         <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
           <SimpleGrid
@@ -182,7 +181,7 @@ export default function Settings() {
               OnClickDelete={(val) => OnClickDelete(val)}
               OnClickEdit={(val) => OnClickEdit(val)}
               nextPage={nextPage}
-              previousPage={previousPage}     
+              previousPage={previousPage}
               currentPage={currentPage}
               totalPages={totalPages}
             />

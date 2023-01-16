@@ -7,23 +7,23 @@ slug = require('mongoose-slug-updater'),
 const questionSchema = new mongoose.Schema({
     sector_id: {
         type: String,
-        require:true
+        require: true
     },
     category_id: {
         type: String,
-        require:true
+        require: true
     },
     grade_id: {
         type: String,
-        require:true
+        require: true
     },
     subject_id: {
         type: String,
-        require:true
+        require: true
     },
     section_id: {
         type: String,
-        require:true
+        require: true
     },
     title: {
         type: String,

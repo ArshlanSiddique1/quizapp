@@ -3,10 +3,11 @@ import axios from 'axios';
 import { getToken } from './user';
 
 
-export async function setQuestion(datas) {
+export async function setQuestion(datas,image) {
     let tokenId = await getToken();
     let data = JSON.stringify({
         "title": datas.title,
+        "image":image,
         "explanation": datas.explanation,
         "year": datas.year,
         "titles": datas.titles,

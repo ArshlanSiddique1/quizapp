@@ -31,7 +31,7 @@ export default function Dashboard(props) {
   useEffect(() => {
     const userInfo = localStorage.getItem("UsersData");
     if (userInfo) {
-      history.push("/");
+      history.push("/admin/default");
     }
     if (!userInfo) {
       history.replace("/singIn");
@@ -45,23 +45,29 @@ export default function Dashboard(props) {
 
 
   const getActiveRoute = (routes) => {
-    let activeRoute = props.location.name;
+    let getTrimBreadCum = props.location.pathname.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+    let removeBreadCum = getTrimBreadCum.replace('admin', '');
+    let getSpaceBreadCum = removeBreadCum.replace(/([A-Z])/g, ' $1')
 
-    console.log(activeRoute)
+    let getBreadCum = getSpaceBreadCum.replace(/^./, function (str) { return str.toUpperCase(); })
+
+    let activeRoute = getBreadCum;
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].items);
         if (collapseActiveRoute !== activeRoute) {
           return collapseActiveRoute;
         }
+      }
 
-      } else if (routes[i].category) {
+      else if (routes[i].category) {
         let categoryActiveRoute = getActiveRoute(routes[i].items);
         if (categoryActiveRoute !== activeRoute) {
           return categoryActiveRoute;
         }
+      }
 
-      } else {
+      else {
         if (
           window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
         ) {
@@ -75,7 +81,6 @@ export default function Dashboard(props) {
   return (
 
     <Box>
-
       <SidebarContext.Provider
         value={{
           toggleSidebar,
@@ -98,11 +103,8 @@ export default function Dashboard(props) {
           <Portal>
             <Box>
               <Navbar
-                // onOpen={onOpen}
                 logoText={"Horizon UI Dashboard PRO"}
                 brandText={getActiveRoute(routes)}
-                // secondary={getActiveNavbar(routes)}
-                // message={getActiveNavbarText(routes)}
                 fixed={fixed}
                 {...rest}
               />
@@ -169,7 +171,7 @@ export default function Dashboard(props) {
 
                                         props.location.pathname === "/admin/EditCategory"
                                           ?
-                                            <CategoryFormUpdate /> :
+                                          <CategoryFormUpdate /> :
 
                                           <MainDashboard />
             }

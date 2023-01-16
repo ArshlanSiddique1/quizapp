@@ -10,7 +10,8 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
-  Box
+  Box,
+  Icon
 } from "@chakra-ui/react";
 import Upload from "./Upload";
 import { useFormik } from "formik";
@@ -22,14 +23,22 @@ import { getGrade } from "../../../../services/grade"
 import { getCategory } from "../../../../services/category"
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { subjectInSchema } from "validationSchema";
+import { multerFileUploader } from "function/multer";
+import "../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
+import { useHistory } from "react-router-dom";
 
 
 
 export default function SubjectForm(props) {
+  const history = useHistory();
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
+  const brandColor = useColorModeValue("brand.500", "white");
+  
 
   useEffect(() => {
     getIds();
@@ -37,7 +46,6 @@ export default function SubjectForm(props) {
   const [sectorId, setSectorId] = useState([])
   const [categoryId, setCategoryId] = useState([])
   const [gradeId, setGradeId] = useState([])
-  // console.log(JSON.stringify(sectorId))
   const getIds = async () => {
     try {
       const SectorData = await getSector()
@@ -53,17 +61,18 @@ export default function SubjectForm(props) {
   }
 
 
-  const SubjectAttribute = async (values) => {
+  const SubjectAttribute = async (values,tempPicPath) => {
     try {
-      console.log("datat", values)
-      await setSubject(values)
+      await setSubject(values,tempPicPath)
         .then(async (response) => {
           let data = response?.data;
-          console.log("dataum",data)
           if (data) {
-            window.location = "/dashboard";
+            Swal.fire({
+              icon: "success",
+              title: "Submitted Successfully"
+            });
+            history.push('/admin/ViewSubjects')
           }
-          // actions.resetForm();
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
@@ -81,6 +90,27 @@ export default function SubjectForm(props) {
     }
   };
 
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
   const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
 
     useFormik({
@@ -97,7 +127,7 @@ export default function SubjectForm(props) {
       },
       validationSchema: subjectInSchema,
       onSubmit: (values, action) => {
-        SubjectAttribute(values);
+        SubjectAttribute(values,tempPicPath);
       },
     });
 
@@ -169,15 +199,10 @@ export default function SubjectForm(props) {
             >
               Image<Text color={brandStars}>*</Text>
             </FormLabel>
-            <Upload
-              gridArea={{
-                base: "3 / 1 / 4 / 2",
-                lg: "1 / 3 / 2 / 4",
-              }}
-              minH={{ base: "auto", lg: "420px", "2xl": "365px" }}
-              pe='20px'
-              pb={{ base: "100px", lg: "20px" }}
-            />
+            <div className="UplaodImg">
+              <Icon as={MdUpload} w='25px' h='30px' color={brandColor} />
+              <input type="file" name="image" onChange={uploadImage} />
+            </div>
           </Box>
 
           <Box bg="" height="80px">
@@ -190,7 +215,7 @@ export default function SubjectForm(props) {
               mb="8px"
               for="Short-Description"
             >
-              shortDescription<Text color={brandStars}>*</Text>
+              Short Description<Text color={brandStars}>*</Text>
             </FormLabel>
             <textarea className="text-field-forms"
               type="text"

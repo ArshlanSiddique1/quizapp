@@ -63,7 +63,7 @@ export default function Settings() {
     setTotalRecords(Mydata?.data?.data?.meta?.total_records);
     setTotalPages(Mydata?.data?.data?.meta?.total_pages);
   }
-  
+
 
 
   async function nextPage() {
@@ -109,29 +109,46 @@ export default function Settings() {
 
 
   // Delete By Id 
+  // Delete By Id 
   const OnClickDelete = async (index) => {
-    // Alert("Are Sure want to delete this field");
-    try {
-      await delQuestion(index).then(async (response) => {
-        if (response.status === "success") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: `${response?.message}`
+    Swal.fire({
+      title: "Are you sure?",
+      text: "But you will not be able to retrieve this file.",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+      allowOutsideClick: false
+    }).then(async (results) => {
+      try {
+        if (results.isConfirmed) {
+          await delQuestion(index).then(async (response) => {
+            if (response.status === "success") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: `${response?.message}`
+              })
+              Question()
+            }
+            else if (response.status !== "success") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `${response?.message}`
+              });
+            }
           })
-          Question()
         }
-        else if (response.status !== "success") {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `${response?.message}`
-          });
-        }
-      })
-    } catch (error) {
-      console.log(error)
+
+      } catch (error) {
+        console.log(error)
+      }
     }
+    )
   }
 
   // Edit The Sector Data By Id
@@ -148,7 +165,7 @@ export default function Settings() {
   return (
     <>
       {edit ?
-        <QuestionFormUpdate data={datas} close={() => { setEdit(false) }} submit={()=>{setEdit(false)}}/>
+        <QuestionFormUpdate data={datas} close={() => { setEdit(false) }} submit={() => { setEdit(false) }} />
         :
         <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
           <SimpleGrid

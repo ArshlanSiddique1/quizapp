@@ -2,11 +2,11 @@ import { API_URL } from '../config';
 import axios from 'axios';
 import { getToken } from './user';
 
-export async function setSubject(datas) {
+export async function setSubject(datas,image) {
     let tokenId = await getToken();
-    console.log("tokenId", tokenId)
     let data = JSON.stringify({
         "title": datas.title,
+        "image":image,
         "description": datas.description,
         "shortDescription": datas.shortDescription,
         "metaTitle": datas.metaTitle,

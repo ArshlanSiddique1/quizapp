@@ -2,10 +2,11 @@ import { API_URL } from '../config';
 import axios from 'axios';
 import { getToken } from './user';
 
-export async function setGrade(datas) {
+export async function setGrade(datas,image) {
     let tokenId = await getToken();
     let data = JSON.stringify({
         "name": datas.gradeName,
+        "image":image,
         "status": datas.statusBtn,
         "featured": datas.featured,
     });

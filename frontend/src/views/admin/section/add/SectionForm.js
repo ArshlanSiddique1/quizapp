@@ -10,7 +10,8 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
-  Box
+  Box,
+  Icon
 } from "@chakra-ui/react";
 import Upload from "./Upload";
 import { useFormik } from "formik";
@@ -24,16 +25,22 @@ import { getSubject } from "../../../../services/subject"
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
 import { sectionInSchema } from "validationSchema";
+import { multerFileUploader } from "function/multer";
+import "../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
 
 
 
 
 export default function SectionForm(props) {
-  const history=useHistory()
+  const history = useHistory();
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
+  const brandColor = useColorModeValue("brand.500", "white");
+
 
   useEffect(() => {
     getIds();
@@ -61,9 +68,9 @@ export default function SectionForm(props) {
 
 
 
-  const SectionAttribute = async (values) => {
+  const SectionAttribute = async (values,tempPicPath) => {
     try {
-      await setSection(values)
+      await setSection(values,tempPicPath)
         .then(async (response) => {
           let data = response.data.Data;
           if (data) {
@@ -71,7 +78,7 @@ export default function SectionForm(props) {
               icon: "success",
               title: "Submitted Successfully"
             });  
-            history.push('/admin/ViewQuestion')
+            history.push('/admin/ViewSection')
           }
         })
         .catch((err) => {
@@ -89,6 +96,30 @@ export default function SectionForm(props) {
       console.log("Error While Submitting: ", error);
     }
   };
+
+
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
+
 
   const { values, handleBlur, handleChange, handleSubmit , touched ,errors} =
 
@@ -108,7 +139,7 @@ export default function SectionForm(props) {
       },
       validationSchema: sectionInSchema,
       onSubmit: (values, action) => {
-        SectionAttribute(values);
+        SectionAttribute(values,tempPicPath);
       },
     });
 
@@ -183,15 +214,10 @@ export default function SectionForm(props) {
             >
               Image<Text color={brandStars}>*</Text>
             </FormLabel>
-            <Upload
-              gridArea={{
-                base: "3 / 1 / 4 / 2",
-                lg: "1 / 3 / 2 / 4",
-              }}
-              minH={{ base: "auto", lg: "420px", "2xl": "365px" }}
-              pe='20px'
-              pb={{ base: "100px", lg: "20px" }}
-            />
+            <div className="UplaodImg">
+              <Icon as={MdUpload} w='25px' h='30px' color={brandColor} />
+              <input type="file" name="image" onChange={uploadImage} />
+            </div>
           </Box>
           <Box bg="" height="80px">
             <FormLabel

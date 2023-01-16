@@ -2,11 +2,12 @@ import { API_URL } from '../config';
 import axios from 'axios';
 import { getToken } from './user';
 
-export async function setCategory(datas) {
-    // let tokenId = await getToken();    
+export async function setCategory(datas, image) {
+    let tokenId = await getToken();    
     let data = JSON.stringify({
         "sector_id":datas.sector_id,
         "title": datas.title,
+        "image":image,
         "description": datas.description,
         "shortDescription": datas.shortDescription,
         "metaTitle": datas.metaTitle,
@@ -19,7 +20,7 @@ export async function setCategory(datas) {
         method: 'post',
         url: `${API_URL}/categories`,
         headers: {
-            // 'authorization': tokenId,
+            'authorization': tokenId,
             'Content-Type': 'application/json',
         },
         data: data

@@ -17,7 +17,7 @@ export default function Dashboard(props) {
   useEffect(() => {
     const userInfo = localStorage.getItem("UsersData");
     if (userInfo) {
-      history.push("/admin/default");
+      history.push("/");
     }
     if (!userInfo) {
       history.replace("/auth");
@@ -120,7 +120,7 @@ export default function Dashboard(props) {
             component={prop.component}
             key={key}
           />
-        );  
+        );
       }
 
       if (prop.collapse) {

@@ -1,28 +1,30 @@
 // Chakra imports
-import { FormControl, FormLabel, Input, Text, useColorModeValue, Button, HStack, Radio, RadioGroup, SimpleGrid, Box, }
-  from "@chakra-ui/react";
-import Upload from "./Upload";
+import {
+  FormControl, FormLabel, Input, Text, Icon, useColorModeValue, Button, HStack, Radio, RadioGroup, SimpleGrid, Box
+} from "@chakra-ui/react";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { setGrade } from "../../../../services/grade";
+import { useState } from "react";
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
+import { multerFileUploader } from "function/multer";
+import "../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
 import { gradeInSchema } from "validationSchema";
 
-
-
 export default function GradeForm(props) {
-  const history = useHistory()
+  const history = useHistory();
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
+  const brandColor = useColorModeValue("brand.500", "white");
 
-
-
-  const GradeAttribute = async (values) => {
+  const GradeAttribute = async (values, tempPicPath) => {
     try {
-      await setGrade(values)
+      await setGrade(values, tempPicPath)
         .then(async (response) => {
           let data = response.data.Data;
           if (data) {
@@ -30,43 +32,57 @@ export default function GradeForm(props) {
               icon: "success",
               title: "Submitted Successfully"
             });
-            history.push('/admin/ViewGrades')
+            history.push('/admin/ViewGrade')
           }
-
         })
         .catch((err) => {
           if (err?.response?.data?.result?.code === 401) {
-
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: `${err?.response?.data?.result?.message}`,
             });
           }
-          console.log({ err });
         });
     } catch (error) {
-
+      console.log("Error While Submitting: ", error);
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit, touched ,errors } =
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
+  const { values, handleBlur, handleChange, handleSubmit, touched, errors } =
 
     useFormik({
       initialValues: {
-        gradeName: "",
-        image: "",
+        title: "",
         statusBtn: "",
         featured: "",
-        optionss: "",
       },
       validationSchema: gradeInSchema,
       onSubmit: (values, action) => {
-        GradeAttribute(values);
+        GradeAttribute(values, tempPicPath);
       },
     });
-
-
   return (
     <>
       <FormControl>
@@ -80,7 +96,7 @@ export default function GradeForm(props) {
               color={textColor}
               mb="8px"
             >
-              NAME<Text color={brandStars}>*</Text>
+              Name<Text color={brandStars}>*</Text>
             </FormLabel>
             <Input
               isRequired={true}
@@ -88,15 +104,14 @@ export default function GradeForm(props) {
               fontSize="sm"
               ms={{ base: "0px", md: "0px" }}
               type="text"
-              placeholder="gradeName"
+              placeholder="title"
               mb="24px"
               fontWeight="500"
               size="lg"
               name="gradeName"
               value={values.gradeName}
               onChange={handleChange}
-              onBlur={handleBlur}
-              className={errors.gradeName && touched.gradeName ? "input-error" : ""}
+              onBlur={handleBlur} className={errors.gradeName && touched.gradeName ? "input-error" : ""}
             />
             {errors.gradeName && touched.gradeName && (
               <p className="error-msg-text">{errors.gradeName}</p>
@@ -113,15 +128,10 @@ export default function GradeForm(props) {
             >
               Image<Text color={brandStars}>*</Text>
             </FormLabel>
-            <Upload
-              gridArea={{
-                base: "3 / 1 / 4 / 2",
-                lg: "1 / 3 / 2 / 4",
-              }}
-              minH={{ base: "auto", lg: "420px", "2xl": "365px" }}
-              pe='20px'
-              pb={{ base: "100px", lg: "20px" }}
-            />
+            <div className="UplaodImg">
+              <Icon as={MdUpload} w='25px' h='30px' color={brandColor} />
+              <input type="file" name="image" onChange={uploadImage} />
+            </div>
           </Box>
         </SimpleGrid>
         <FormLabel
@@ -133,7 +143,7 @@ export default function GradeForm(props) {
           mb="8px"
           mt="20px"        >
           Status<Text color={brandStars}>*</Text></FormLabel>
-        <RadioGroup>
+        <RadioGroup /*defaultValue="INACTIVE"*/>
           <HStack spacing="24px">
             <Radio
               name="statusBtn"
@@ -147,8 +157,6 @@ export default function GradeForm(props) {
               onBlur={handleBlur}>Inactive</Radio>
           </HStack>
         </RadioGroup>
-
-
         <FormLabel
           display="flex"
           ms="4px"
@@ -158,7 +166,7 @@ export default function GradeForm(props) {
           mb="8px"
           mt="20px"        >
           Featured<Text color={brandStars}>*</Text></FormLabel>
-        <RadioGroup >
+        <RadioGroup defaultValue="INACTIVE">
           <HStack spacing="24px">
             <Radio
               name="featured"
@@ -172,16 +180,9 @@ export default function GradeForm(props) {
               onBlur={handleBlur}>False</Radio>
           </HStack>
         </RadioGroup>
-        {/* <Form.Select aria-label="Default select example" name="optionss" onChange={handleChange}>
-          <option>Open this select menu</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </Form.Select> */}
       </FormControl>
       <Button
         mt={4}
-
         colorScheme="brand"
         isLoading={props.isSubmitting}
         type="submit"

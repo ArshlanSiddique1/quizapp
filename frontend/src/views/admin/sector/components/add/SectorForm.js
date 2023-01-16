@@ -10,7 +10,7 @@ import {
   Radio,
   RadioGroup,
   SimpleGrid,
-  Box
+  Box,Icon
 } from "@chakra-ui/react";
 import Upload from "./Upload";
 import { useFormik } from "formik";
@@ -20,6 +20,9 @@ import { useHistory } from "react-router-dom";
 import { sectorInSchema } from "validationSchema";
 import { useState } from "react";
 import { multerFileUploader } from "function/multer";
+import "../../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
+
 
 
 export default function SectorForm(props) {
@@ -30,6 +33,8 @@ export default function SectorForm(props) {
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
+  const brandColor = useColorModeValue("brand.500", "white");
+
 
 
   // Formik for form validation
@@ -100,8 +105,6 @@ export default function SectorForm(props) {
       onSubmit: (values, action) => {
 
         SectorAttribute(values, tempPicPath);
-
-        console.log(values, "dkd", { tempPicPath })
       },
     });
 
@@ -153,18 +156,13 @@ export default function SectorForm(props) {
               mb="8px"
             >
               Image<Text color={brandStars}>*</Text>
-            </FormLabel>
-            <Upload
-              gridArea={{
-                base: "3 / 1 / 4 / 2",
-                lg: "1 / 3 / 2 / 4",
-              }}
-              minH={{ base: "auto", lg: "420px", "2xl": "365px" }}
-              pe='20px'
-              pb={{ base: "100px", lg: "20px" }}
-            />
+            </FormLabel>    
+            <div className="UplaodImg">
+            <Icon as={MdUpload} w='25px' h='30px' color={brandColor} />
+            <input type="file" name="image"  onChange={uploadImage} />
+            </div>
           </Box>
-          <input type="file" name="image" onChange={uploadImage} />
+
           <Box bg="" height="80px">
             <FormLabel
               display="flex"

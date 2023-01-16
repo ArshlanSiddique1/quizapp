@@ -1,12 +1,13 @@
 // Chakra imports
-import { Box, SimpleGrid
- } from "@chakra-ui/react";
+import {
+  Box, SimpleGrid
+} from "@chakra-ui/react";
 import DevelopmentTable from "./section"
 import Swal from "sweetalert2";
 import React from "react";
 import { useEffect, useState } from "react";
-import {cancel} from "./Edit/SectionFormUpdate"
-import { getSectionById,delSection,getSection } from "../../../../services/section";
+import { cancel } from "./Edit/SectionFormUpdate"
+import { getSectionById, delSection, getSection } from "../../../../services/section";
 import SectionFormUpdate from "./Edit/SectionFormUpdate";
 export const columnsDataDevelopment = [
   {
@@ -66,7 +67,7 @@ export default function Settings() {
     setTotalRecords(Mydata?.data?.data?.meta?.total_records);
     setTotalPages(Mydata?.data?.data?.meta?.total_pages);
   }
-  
+
 
 
   async function nextPage() {
@@ -111,28 +112,46 @@ export default function Settings() {
 
 
   // Delete By Id 
+  // Delete By Id 
   const OnClickDelete = async (index) => {
-    try {
-      await delSection(index).then(async (response) => {
-        console.log("Response ", response)
-        if (response.status === "success") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: `${response?.message}`
+    Swal.fire({
+      title: "Are you sure?",
+      text: "But you will not be able to retrieve this file.",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+      allowOutsideClick: false
+    }).then(async (results) => {
+      try {
+        if (results.isConfirmed) {
+          await delSection(index).then(async (response) => {
+            if (response.status === "success") {
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: `${response?.message}`
+              })
+              Section()
+            }
+            else if (response.status !== "success") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `${response?.message}`
+              });
+            }
           })
-          Section()
         }
-        else if (response.status !== "success") {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `${response?.message}`
-          });
-        }
-      })
-    } catch (error) {
+
+      } catch (error) {
+        console.log(error)
+      }
     }
+    )
   }
 
   // Edit The Sector Data By Id
@@ -142,15 +161,15 @@ export default function Settings() {
     setEdit(true);
   }
 
-  
+
   cancel();
 
   // Chakra Color Mode
   return (
     <>
       {edit ?
-        <SectionFormUpdate data={datas} close={() => { setEdit(false) }} submit={()=>{setEdit(false)}}/>    
-         :
+        <SectionFormUpdate data={datas} close={() => { setEdit(false) }} submit={() => { setEdit(false) }} />
+        :
         <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
           <SimpleGrid
             mb='20px'

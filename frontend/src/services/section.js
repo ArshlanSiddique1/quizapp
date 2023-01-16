@@ -2,11 +2,11 @@ import { API_URL } from '../config';
 import axios from 'axios';
 import { getToken } from './user';
 
-export async function setSection(datas) {
+export async function setSection(datas,image) {
     let tokenId = await getToken(); 
     let data = JSON.stringify({
         "title": datas.title,
-        "image":datas.image,
+        "image":image,
         "description": datas.description,
         "shortDescription": datas.shortDescription,
         "metaTitle": datas.metaTitle,

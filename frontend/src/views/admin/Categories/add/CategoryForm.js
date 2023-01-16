@@ -1,29 +1,36 @@
 // Chakra imports
-import {FormControl,FormLabel,Input,Text,useColorModeValue,Button,HStack,Radio,RadioGroup,SimpleGrid,Box
+import {
+  FormControl, FormLabel, Input, Text, Icon, useColorModeValue, Button, HStack, Radio, RadioGroup, SimpleGrid, Box
 } from "@chakra-ui/react";
 import Upload from "./Upload";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import { setCategory } from "../../../../services/category";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getSector } from "../../../../services/sector";
 import '../../../../assets/css/CustomCssForDropDown.css'
 import { useHistory } from "react-router-dom";
 import { categoryInSchema } from "validationSchema";
+import { multerFileUploader } from "function/multer";
+import "../../../../assets/css/MyCustom.css"
+import { MdUpload } from "react-icons/md";
 
 
 export default function CategoryForm(props) {
   const history = useHistory();
+  const [tempPicPath, setTempPicPath] = useState("");
+  const [tempPicture, setTempPicture] = useState("");
   // Chakra Color Mode
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const textColor = useColorModeValue("navy.700", "white");
-  // Formik for form validation
+  const brandColor = useColorModeValue("brand.500", "white");
+
+
 
   useEffect(() => {
     getIds();
   }, []);
   const [sectorId, setSectorId] = useState([])
-  // console.log(JSON.stringify(sectorId))
   const getIds = async () => {
     try {
       const SectorData = await getSector()
@@ -34,16 +41,16 @@ export default function CategoryForm(props) {
   }
 
 
-  const CategoryAttribute = async (values) => {
+  const CategoryAttribute = async (values, tempPicPath) => {
     try {
-      await setCategory(values)
+      await setCategory(values,tempPicPath)
         .then(async (response) => {
           let data = response.data.Data;
-          if (data) {  
+          if (data) {
             Swal.fire({
               icon: "success",
               title: "Submitted Successfully"
-            });  
+            });
             history.push('/admin/ViewCategory')
           }
         })
@@ -61,11 +68,32 @@ export default function CategoryForm(props) {
     }
   };
 
-  const { values, handleBlur, handleChange, handleSubmit , touched ,errors} =
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (file?.type == "image/jpeg" || file?.type == "image/png" || file?.type == "image/gif") {
+
+      if (file) {
+        setTempPicture(URL.createObjectURL(file));
+        const filPath = await multerFileUploader(file)
+        setTempPicPath(filPath);
+      }
+
+    }
+    else {
+      Swal.fire(
+        'Not supported!',
+        'Supported file type - JPEG, PNG and GIF.',
+        'info'
+      )
+    }
+  }
+
+  const { values, handleBlur, handleChange, handleSubmit, touched, errors } =
 
     useFormik({
       initialValues: {
-        sector_id:"",
+        sector_id: "",
         title: "",
         description: "",
         shortDescription: "",
@@ -78,7 +106,7 @@ export default function CategoryForm(props) {
       },
       validationSchema: categoryInSchema,
       onSubmit: (values, action) => {
-        CategoryAttribute(values);
+        CategoryAttribute(values,tempPicPath);
       },
     });
   return (
@@ -86,9 +114,9 @@ export default function CategoryForm(props) {
       <FormControl>
         <SimpleGrid>
           <select className="dropDown" name="sector_id" onChange={handleChange} onBlur={handleBlur}>
-          <option selected disabled>Choose Sector Title</option>
-          {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))}
-        </select>
+            <option selected disabled>Choose Sector Title</option>
+            {sectorId.map((item, i) => (<>{item.status === "ACTIVE" ? <option value={item._id}>{item.title}</option> : ""}</>))}
+          </select>
         </SimpleGrid>
 
         <SimpleGrid columns={2} spacing={8}>
@@ -116,11 +144,11 @@ export default function CategoryForm(props) {
               name="title"
               value={values.title}
               onChange={handleChange}
-              onBlur={handleBlur}className={errors.title && touched.title ? "input-error" : ""}
-              />
-              {errors.title && touched.title && (
-                <p className="error-msg-text">{errors.title}</p>
-              )}
+              onBlur={handleBlur} className={errors.title && touched.title ? "input-error" : ""}
+            />
+            {errors.title && touched.title && (
+              <p className="error-msg-text">{errors.title}</p>
+            )}
           </Box>
           <Box bg="" height="80px">
             <FormLabel
@@ -133,15 +161,10 @@ export default function CategoryForm(props) {
             >
               Image<Text color={brandStars}>*</Text>
             </FormLabel>
-            <Upload
-              gridArea={{
-                base: "3 / 1 / 4 / 2",
-                lg: "1 / 3 / 2 / 4",
-              }}
-              minH={{ base: "auto", lg: "420px", "2xl": "365px" }}
-              pe='20px'
-              pb={{ base: "100px", lg: "20px" }}
-            />
+            <div className="UplaodImg">
+              <Icon as={MdUpload} w='25px' h='30px' color={brandColor} />
+              <input type="file" name="image" onChange={uploadImage} />
+            </div>
           </Box>
           <Box bg="" height="80px">
             <FormLabel
@@ -200,7 +223,7 @@ export default function CategoryForm(props) {
           color={textColor}
           mb="8px"
         >
-        Description<Text color={brandStars}>*</Text>
+          Description<Text color={brandStars}>*</Text>
         </FormLabel>
         <textarea className="text-field-forms"
           type="text"
